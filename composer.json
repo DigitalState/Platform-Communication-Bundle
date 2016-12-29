@@ -1,0 +1,34 @@
+{
+  "name": "DigitalState/Platform-Communication-Bundle",
+  "type": "symfony-bundle",
+  "description": "Digital State Platform Communication Bundle",
+  "homepage": "https://github.com/DigitalState/Platform-Communication-Bundle.git",
+  "keywords": ["Oro", "Communication"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Digital State, Inc",
+      "homepage": "http://www.digitalState.ca"
+    }
+  ],
+  "require": {
+    "php": ">=5.6",
+    "DigitalState/Platform-Admin-Bundle" : "dev-master",
+    "DigitalState/Platform-Data-Bundle" : "dev-master",
+    "DigitalState/Platform-Entity-Bundle" : "dev-master",
+    "DigitalState/Platform-User-Bundle" : "dev-master",
+    "DigitalState/Platform-User-Persona-Bundle" : "dev-master",
+    "DigitalState/Platform-Transport-Bundle" : "dev-master",
+    "DigitalState/Platform-Widget-Bundle" : "dev-master"
+  },
+  "autoload": {
+    "psr-0": { "Ds\\Bundle\\CommunicationBundle": "" }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.x-dev"
+    }
+  }
+}
