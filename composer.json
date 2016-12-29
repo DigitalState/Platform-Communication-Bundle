@@ -1,34 +1,34 @@
 {
-  "name": "DigitalState/Platform-Communication-Bundle",
-  "type": "symfony-bundle",
-  "description": "Digital State Platform Communication Bundle",
-  "homepage": "https://github.com/DigitalState/Platform-Communication-Bundle.git",
-  "keywords": ["Oro", "Communication"],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Digital State, Inc",
-      "homepage": "http://www.digitalState.ca"
+    "name": "digitalstate/platform-communication-bundle",
+    "type": "symfony-bundle",
+    "description": "DigitalState Platform Communication Bundle",
+    "homepage": "https://github.com/DigitalState/Platform-Communication-Bundle.git",
+    "keywords": ["Oro", "Communication"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DigitalState, Inc",
+            "homepage": "http://www.digitalstate.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "digitalstate/platform-admin-bundle" : "dev-master",
+        "digitalstate/platform-data-bundle" : "dev-master",
+        "digitalstate/platform-entity-bundle" : "dev-master",
+        "digitalstate/platform-user-bundle" : "dev-master",
+        "digitalstate/platform-user-persona-bundle" : "dev-master",
+        "digitalstate/platform-transport-bundle" : "dev-master",
+        "digitalstate/platform-widget-bundle" : "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Ds\\Bundle\\CommunicationBundle": "" }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
     }
-  ],
-  "require": {
-    "php": ">=5.6",
-    "DigitalState/Platform-Admin-Bundle" : "dev-master",
-    "DigitalState/Platform-Data-Bundle" : "dev-master",
-    "DigitalState/Platform-Entity-Bundle" : "dev-master",
-    "DigitalState/Platform-User-Bundle" : "dev-master",
-    "DigitalState/Platform-User-Persona-Bundle" : "dev-master",
-    "DigitalState/Platform-Transport-Bundle" : "dev-master",
-    "DigitalState/Platform-Widget-Bundle" : "dev-master"
-  },
-  "autoload": {
-    "psr-0": { "Ds\\Bundle\\CommunicationBundle": "" }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.x-dev"
-    }
-  }
 }
