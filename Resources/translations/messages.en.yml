@@ -15,6 +15,9 @@ ds:
         title:
             label: Title
             description: ~
+        entityName:
+            label: Entity
+            description: ~
         description:
             label: Description
             description: ~
@@ -310,6 +313,9 @@ ds:
                 description: ~
             title:
                 label: Title
+                description: ~
+            entityName:
+                label: Entity
                 description: ~
             presentation:
                 label: Presentation

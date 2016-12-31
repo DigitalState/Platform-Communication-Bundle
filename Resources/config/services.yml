@@ -1,0 +1,19 @@
+
+services:
+
+    ds.communication.provider.contact_information_exclusion:
+        class: Ds\Bundle\CommunicationBundle\Provider\ContactInformationExclusionProvider
+        arguments:
+            - "@oro_entity_config.provider.entity"
+            - "@doctrine"
+
+    ds.communication.provider.chain_exclusion:
+        class: %oro_entity.exclusion_provider.chain.class%
+        calls:
+            - [addProvider,  ["@oro_query_designer.exclusion_provider"]]
+            - [addProvider,  ["@ds.communication.provider.contact_information_exclusion"]]
+
+    ds.communication.entity_provider.contact_information:
+        parent: oro_query_designer.entity_provider
+        calls:
+            - [setExclusionProvider,  ["@ds.communication.provider.chain_exclusion"]]

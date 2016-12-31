@@ -1,2 +1,6 @@
+# Notepad++
+*.bak
+
+
 # PHPStorm
 /.idea/

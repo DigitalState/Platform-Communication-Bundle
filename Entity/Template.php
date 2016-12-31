@@ -60,6 +60,7 @@ class Template
     use Attribute\UpdatedAt;
     use Attribute\Title;
     use Attribute\Presentation;
+    use Attribute\EntityName;
 
     use Ownership\BusinessUnitAwareTrait;
 }

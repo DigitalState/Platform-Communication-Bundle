@@ -5,10 +5,12 @@ services:
             - @ds.communication.collection.channel
         tags:
             - { name: form.type, alias: ds_communication_channel }
+
     ds.communication.form.type.api.channel:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\ChannelType
         tags:
             - { name: form.type, alias: ds_communication_api_channel }
+
     ds.communication.form.api.channel:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -16,6 +18,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_channel
+
     ds.communication.form.handler.channel:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\ChannelHandler
         scope: request
@@ -23,14 +26,17 @@ services:
             - @ds.communication.form.api.channel
             - @request
             - @doctrine.orm.entity_manager
+
     ds.communication.form.type.communication:
         class: Ds\Bundle\CommunicationBundle\Form\Type\CommunicationType
         tags:
             - { name: form.type, alias: ds_communication_communication }
+
     ds.communication.form.type.api.communication:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\CommunicationType
         tags:
             - { name: form.type, alias: ds_communication_api_communication }
+
     ds.communication.form.api.communication:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -38,6 +44,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_communication
+
     ds.communication.form.handler.communication:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\CommunicationHandler
         scope: request
@@ -45,14 +52,17 @@ services:
             - @ds.communication.form.api.communication
             - @request
             - @doctrine.orm.entity_manager
+
     ds.communication.form.type.content:
         class: Ds\Bundle\CommunicationBundle\Form\Type\ContentType
         tags:
             - { name: form.type, alias: ds_communication_content }
+
     ds.communication.form.type.api.content:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\ContentType
         tags:
             - { name: form.type, alias: ds_communication_api_content }
+
     ds.communication.form.api.content:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -60,6 +70,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_content
+
     ds.communication.form.handler.content:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\ContentHandler
         scope: request
@@ -67,16 +78,19 @@ services:
             - @ds.communication.form.api.content
             - @request
             - @doctrine.orm.entity_manager
+
     ds.communication.form.type.criterion:
         class: Ds\Bundle\CommunicationBundle\Form\Type\CriterionType
         arguments:
             - @ds.communication.collection.criterion
         tags:
             - { name: form.type, alias: ds_communication_criterion }
+
     ds.communication.form.type.api.criterion:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\CriterionType
         tags:
             - { name: form.type, alias: ds_communication_api_criterion }
+
     ds.communication.form.api.criterion:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -84,6 +98,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_criterion
+
     ds.communication.form.handler.criterion:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\CriterionHandler
         scope: request
@@ -91,14 +106,17 @@ services:
             - @ds.communication.form.api.criterion
             - @request
             - @doctrine.orm.entity_manager
+
     ds.communication.form.type.message:
         class: Ds\Bundle\CommunicationBundle\Form\Type\MessageType
         tags:
             - { name: form.type, alias: ds_communication_message }
+
     ds.communication.form.type.api.message:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\MessageType
         tags:
             - { name: form.type, alias: ds_communication_api_message }
+
     ds.communication.form.api.message:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -106,6 +124,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_message
+
     ds.communication.form.handler.message:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\MessageHandler
         scope: request
@@ -113,14 +132,17 @@ services:
             - @ds.communication.form.api.message
             - @request
             - @doctrine.orm.entity_manager
+
     ds.communication.form.type.template:
         class: Ds\Bundle\CommunicationBundle\Form\Type\TemplateType
         tags:
             - { name: form.type, alias: ds_communication_template }
+
     ds.communication.form.type.api.template:
         class: Ds\Bundle\CommunicationBundle\Form\Type\Api\TemplateType
         tags:
             - { name: form.type, alias: ds_communication_api_template }
+
     ds.communication.form.api.template:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -128,6 +150,7 @@ services:
         arguments:
             - ~
             - ds_communication_api_template
+
     ds.communication.form.handler.template:
         class: Ds\Bundle\CommunicationBundle\Form\Handler\TemplateHandler
         scope: request
@@ -135,3 +158,10 @@ services:
             - @ds.communication.form.api.template
             - @request
             - @doctrine.orm.entity_manager
+
+    ds.communication.form.type.entity_choice:
+        class: Ds\Bundle\CommunicationBundle\Form\Type\ContactInformationEntityChoiceType
+        arguments:
+            - "@ds.communication.entity_provider.contact_information"
+        tags:
+            - { name: form.type, alias: ds_communication_contact_information_entity_choice }

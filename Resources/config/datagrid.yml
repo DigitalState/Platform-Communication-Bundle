@@ -516,6 +516,7 @@ datagrid:
             query:
                 select:
                     - t.id
+                    - t.entityName
                     - t.title
                     - t.createdAt
                     - t.updatedAt
@@ -526,6 +527,13 @@ datagrid:
         columns:
             id:
                 label: ds.communication.template.id.label
+            entityName:
+                label: ds.communication.template.entityName.label
+                type:           twig
+                template:       OroEntityBundle:Datagrid:Property/entity.html.twig
+                frontend_type:  html
+                context:
+                    entity_provider: "@oro_entity.entity_provider"
             title:
                 label: ds.communication.template.title.label
             createdAt:
@@ -565,6 +573,15 @@ datagrid:
                 id: ASC
         filters:
             columns:
+                entityName:
+                    type:      choice
+                    data_name: t.entityName
+                    null_value: _empty_
+                    options:
+                        field_options:
+                            multiple:       true
+                            choices:        "@oro_email.emailtemplate.datagrid_helper->getEntityNames"
+                            translatable_options: false
                 title:
                     type: string
                     data_name: t.title

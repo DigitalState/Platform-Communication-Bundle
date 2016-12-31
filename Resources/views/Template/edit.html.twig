@@ -1,6 +1,14 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% form_theme form with 'OroFormBundle:Form:fields.html.twig' %}
+{% set pageComponent = {
+'module': 'oroui/js/app/components/view-component',
+'options': {'view': 'oroemail/js/app/views/email-template-editor-view'},
+'layout': 'separate'
+} %}
+
+{% import 'OroEmailBundle::macros.html.twig' as _emailMacros %}
+
 
 {% if entity.id %}
     {% set formAction = path('ds_communication_template_edit', { id: entity.id }) %}
@@ -46,12 +54,19 @@
 {% block content_data %}
     {% set dataBlocks = [] %}
     {% for widget in ds_widgets({ position: 'ds_communication_template_form', context: context }, { form: form, context: context }) %}
+
+        {# @todo  Click on variable name should append it in the form field, but names are hardcoded in oro oro/platform/src/Oro/Bundle/EmailBundle/Resources/public/js/app/views/email-variable-view.js#}
+
         {% set dataBlocks = dataBlocks|merge([ {
             title: widget.title|trans,
             subblocks: [ {
-                data : [ widget.content ]
+                data : [
+                    widget.content,
+                   _emailMacros.renderAvailableVariablesWidget(form.vars.value.entityName, form.entityName.vars.id)
+                ]
             } ]
         } ]) %}
+
     {% endfor %}
     {% set id = 'template-edit' %}
     {% set data = { dataBlocks: dataBlocks } %}

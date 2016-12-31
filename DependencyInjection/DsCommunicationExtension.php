@@ -25,6 +25,7 @@ class DsCommunicationExtension extends Extension
         $loader->load('collections.yml');
         $loader->load('criteria.yml');
         $loader->load('forms.yml');
+        $loader->load('services.yml');
         $loader->load('managers.yml');
         $loader->load('repositories.yml');
         $loader->load('widgets.yml');

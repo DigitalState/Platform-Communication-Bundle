@@ -2,6 +2,8 @@
 
 namespace Ds\Bundle\CommunicationBundle\Manager;
 
+use Ds\Bundle\CommunicationBundle\Channel\Channel;
+use Ds\Bundle\TransportBundle\Transport\Transport;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ds\Bundle\CommunicationBundle\Collection\ChannelCollection;
@@ -53,10 +55,12 @@ class MessageManager extends ApiEntityManager
         $this->om->persist($message);
         $this->om->flush();
 
+        /** @var Channel $channel */
         $channel = $this->channelCollection->filter(function($item) use ($message) {
             return $item['implementation'] == $message->getChannel()->getImplementation();
         })->first()['channel'];
 
+        /** @var Transport  $transport */
         $transport = $this->transportCollection->filter(function($item) use ($profile) {
             return $item['implementation'] == $profile->getTransport()->getImplementation();
         })->first()['transport'];
