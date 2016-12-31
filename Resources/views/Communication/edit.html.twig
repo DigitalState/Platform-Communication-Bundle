@@ -2,6 +2,14 @@
 
 {% form_theme form with 'OroFormBundle:Form:fields.html.twig' %}
 
+{% set pageComponent = {
+'module': 'oroui/js/app/components/view-component',
+'options': {'view': 'oroemail/js/app/views/email-template-editor-view'},
+'layout': 'separate'
+} %}
+
+{% import 'OroEmailBundle::macros.html.twig' as _emailMacros %}
+
 {% if entity.id %}
     {% set formAction = path('ds_communication_communication_edit', { id: entity.id }) %}
 {% else %}
@@ -49,7 +57,10 @@
         {% set dataBlocks = dataBlocks|merge([ {
             title: widget.title|trans,
             subblocks: [ {
-                data : [ widget.content ]
+                data : [
+                        widget.content,
+                        _emailMacros.renderAvailableVariablesWidget(form.vars.value.entityName, form.entityName.vars.id)
+                ]
             } ]
         } ]) %}
     {% endfor %}

@@ -61,6 +61,7 @@ class Communication
     use Attribute\UpdatedAt;
     use Attribute\Title;
     use Attribute\Description;
+    use Attribute\EntityName;
 
     use Ownership\BusinessUnitAwareTrait;
 

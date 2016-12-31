@@ -22,6 +22,10 @@ class TemplateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('entityName', 'ds_communication_contact_information_entity_choice', [
+            'required' => true
+        ]);
+
         $builder->add('title', 'text', [
             'label' => 'ds.communication.template.title.label'
         ]);
@@ -33,11 +37,6 @@ class TemplateType extends AbstractType
         $builder->add('owner', 'oro_business_unit_select', [
             'label' => 'ds.communication.template.owner.label'
         ]);
-
-        $builder->add('entityName', 'ds_communication_contact_information_entity_choice', [
-            'required' => true
-        ]);
-
 
         // disable some fields for non editable email template
         $setDisabled = function (&$options)

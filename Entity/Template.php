@@ -63,4 +63,9 @@ class Template
     use Attribute\EntityName;
 
     use Ownership\BusinessUnitAwareTrait;
+
+    public function __toString()
+    {
+        return $this->getEntityName() . ' ' . $this->getTitle();
+    }
 }

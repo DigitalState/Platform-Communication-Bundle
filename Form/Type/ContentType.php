@@ -46,8 +46,16 @@ class ContentType extends AbstractType
         $builder->add('template', 'entity', [
             'label' => 'ds.communication.content.template.label',
             'class' => 'DsCommunicationBundle:Template',
-            'choice_label' => 'title',
-            'placeholder' => 'ds.communication.content.template.placeholder'
+            'choice_label' => function ($value, $key, $index)
+            {
+                // @todo Templates list should be updated dynamicly based on the entityName selected on the Communication
+                return preg_replace('/.*\x5c([^\x5c\s]*) (.*)/', '$1 -> $2', $value); //  \x5c = '\'
+            },
+            'placeholder' => 'ds.communication.content.template.placeholder',
+
+//            'depends_on_parent_field' => 'marketingList',
+//            'data_route' => 'orocrm_api_get_emailcampaign_email_templates',
+//            'data_route_parameter' => 'id'
         ]);
 
         $builder->add('presentation', 'oro_rich_text', [

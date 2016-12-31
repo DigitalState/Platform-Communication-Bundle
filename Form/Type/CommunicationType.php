@@ -17,6 +17,10 @@ class CommunicationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('entityName', 'ds_communication_contact_information_entity_choice', [
+            'required' => true
+        ]);
+
         $builder->add('title', 'text', [
             'label' => 'ds.communication.title.label'
         ]);
@@ -47,6 +51,8 @@ class CommunicationType extends AbstractType
         $builder->add('owner', 'oro_business_unit_select', [
             'label' => 'ds.communication.owner.label'
         ]);
+
+
     }
 
     /**

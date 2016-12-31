@@ -210,7 +210,7 @@ datagrid:
                 select:
                     - c.id
                     - c.title
-#                    - c3.title as channel_title
+#                    - c3.title as channel_title  # @todo display channel name
                     - p.title as profile_title
                     - c2.title as communication_title
                     - t.title as template_title
