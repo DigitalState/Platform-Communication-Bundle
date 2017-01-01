@@ -19,6 +19,7 @@
         "digitalstate/platform-user-bundle" : "dev-master",
         "digitalstate/platform-user-persona-bundle" : "dev-master",
         "digitalstate/platform-transport-bundle" : "dev-master",
+        "digitalstate/platform-security-bundle" : "dev-master",
         "digitalstate/platform-widget-bundle" : "dev-master"
     },
     "autoload": {
