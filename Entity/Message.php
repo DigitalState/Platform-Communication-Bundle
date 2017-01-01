@@ -108,7 +108,7 @@ class Message
      * Set user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @return \Ds\Bundle\NotificationBundle\Entity\Message
+     * @return \Ds\Bundle\CommunicationBundle\Entity\Message
      */
     public function setUser(User $user = null)
     {

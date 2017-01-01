@@ -1,1 +1,32 @@
-222
+
+
+
+{#
+{{ service_container.get('asdf') }}
+{% set gridName = 'ds_communication_users_list_items_grid_' ~ entity.id  %}
+{% set itemsGridName = gridName ~ '_items' %}
+{% set itemsMixin = 'ds-communication-users-items-mixin' %}
+
+{{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': itemsMixin}) }}
+#}
+
+{# @todo datagrid !! #}
+{% for u in entity.users %}
+    {% set user = u[0] %}
+    <li>
+        {% if user.firstName  is defined %}
+            {{ user.firstName }}
+        {% endif %}
+
+        {% if user.lastName  is defined %}
+            {{ user.lastName }}
+        {% endif %}
+
+        {% if user.emails  is defined %}
+            {{ user.emails |join(', ') }}
+        {% endif %}
+    </li>
+
+{% else %}
+    [[ empty list]]
+{% endfor %}

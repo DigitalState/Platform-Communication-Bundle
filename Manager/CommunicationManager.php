@@ -2,6 +2,13 @@
 
 namespace Ds\Bundle\CommunicationBundle\Manager;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Ds\Bundle\CommunicationBundle\Entity\Content;
+use Ds\Bundle\CommunicationBundle\Entity\Message;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
+use Oro\Bundle\SegmentBundle\Entity\Segment;
+use Oro\Bundle\SegmentBundle\Query\DynamicSegmentQueryBuilder;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Entity\UserManager;
@@ -24,6 +31,16 @@ class CommunicationManager extends ApiEntityManager
     protected $messageManager;
 
     /**
+     * @var DynamicSegmentQueryBuilder
+     */
+    protected $dynamicSegmentQueryBuilder;
+
+    /**
+     * @var OwnershipMetadataProvider
+     */
+    protected $ownershipMetadataProvider;
+
+    /**
      * Constructor
      *
      * @param string $class
@@ -31,12 +48,19 @@ class CommunicationManager extends ApiEntityManager
      * @param \Oro\Bundle\UserBundle\Entity\UserManager $userManager
      * @param \Ds\Bundle\CommunicationBundle\Manager\MessageManager $messageManager
      */
-    public function __construct($class, ObjectManager $om, UserManager $userManager, MessageManager $messageManager)
+    public function __construct($class,
+                                ObjectManager $om,
+                                UserManager $userManager,
+                                MessageManager $messageManager,
+                                DynamicSegmentQueryBuilder $dynamicSegmentQueryBuilder,
+                                OwnershipMetadataProvider $ownershipMetadataProvider    )
     {
         parent::__construct($class, $om);
 
         $this->userManager = $userManager;
         $this->messageManager = $messageManager;
+        $this->dynamicSegmentQueryBuilder = $dynamicSegmentQueryBuilder;
+        $this->ownershipMetadataProvider = $ownershipMetadataProvider;
     }
 
     /**
@@ -49,11 +73,13 @@ class CommunicationManager extends ApiEntityManager
     {
         $contents = $communication->getContents();
 
+        /** @var Content $content */
         foreach ($contents as $content) {
 
-            $users = $this->getUsers($content->getChannel());
+            $users = $this->getUsers($communication, $content->getChannel());
 
             foreach ($users as $user) {
+                /** @var Message $message */
                 $message = $this->messageManager->createEntity();
                 $message
                     ->setCommunication($communication)
@@ -61,6 +87,7 @@ class CommunicationManager extends ApiEntityManager
                     ->setChannel($content->getChannel())
                     ->setTitle($content->getTitle())
                     ->setPresentation($content->getPresentation());
+
                 $this->messageManager->send($message, $content->getProfile());
             }
         }
@@ -73,14 +100,65 @@ class CommunicationManager extends ApiEntityManager
      *
      * @param array $criteria
      * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
+     * @return QueryBuilder
+     */
+    public function getCriteriaQueryBuilder(Communication $communication, $extraFields = [])
+    {
+        $segment = new Segment();
+        $segment->setOrganization($communication->getOrganization());
+        $segment->setDefinition(json_encode($communication->getCriteria()));
+        $segment->setEntity($communication->getEntityName());
+
+        try
+        {
+            $qb = $this->dynamicSegmentQueryBuilder
+                ->getQueryBuilder($segment);
+
+            $alias = current($qb->getDQLPart('from'))->getAlias();
+
+            $qb->addSelect($alias );
+            foreach($extraFields as $field)
+            {
+                $qb->addSelect($alias  . '.' . $field);
+            }
+
+            $organizationField = $this->ownershipMetadataProvider
+                ->getMetadata($segment->getEntity())
+                ->getGlobalOwnerFieldName();
+
+            if ($organizationField)
+            {
+                $qb->andWhere(
+                    sprintf(
+                        '%s.%s = %s',
+                        $qb->getRootAliases()[0],
+                        $organizationField,
+                        $segment->getOrganization()->getId()
+                    )
+                );
+            }
+
+            return $qb;
+        }
+        catch (\Exception $exception)
+        {
+            throw $exception;
+        }
+    }
+
+    /**
+     * Get users
+     *
+     * @param array $criteria
+     * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
      * @return array
      */
-    public function getUsers(Channel $channel = null)
+    public function getUsers(Communication $communication, Channel $channel = null, $extraFields = [])
     {
-        // @todo
+        $qb= $this->getCriteriaQueryBuilder($communication , $extraFields);
 
-        $query = $this->om->createQueryBuilder();
+        // @todo check for $channel
 
-        return $query->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 }

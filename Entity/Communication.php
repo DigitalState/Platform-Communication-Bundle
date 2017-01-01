@@ -65,6 +65,26 @@ class Communication
 
     use Ownership\BusinessUnitAwareTrait;
 
+
+    protected $users = []; #region @todo use service in template for datagrid
+    /**
+     * @return array
+     */
+    public function getUsers(): array
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param array $users
+     */
+    public function setUsers(array $users)
+    {
+        $this->users = $users;
+        return $this;
+    }
+    #endregion
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Ds\Bundle\CommunicationBundle\Entity\Content", mappedBy="communication", cascade={"persist", "remove"})
@@ -112,17 +132,6 @@ class Communication
      */
     protected $criteria; # region accessors
 
-
-    # endregion
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->contents = new ArrayCollection;
-    }
-
     /**
      * @return mixed
      */
@@ -138,4 +147,15 @@ class Communication
     {
         $this->criteria = $criteria;
     }
+
+    # endregion
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contents = new ArrayCollection;
+    }
+
 }

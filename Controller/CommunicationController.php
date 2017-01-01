@@ -2,14 +2,15 @@
 
 namespace Ds\Bundle\CommunicationBundle\Controller;
 
+use Doctrine\ORM\QueryBuilder;
 use Ds\Bundle\AdminBundle\Controller\BreadController;
 use Ds\Bundle\CommunicationBundle\Entity\Communication;
 
+use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Symfony\Component\HttpFoundation\Response;
-use Twilio\Rest\Api\V2010\Account\MessageList;
 
 /**
  * Class CommunicationController
@@ -38,6 +39,7 @@ class CommunicationController extends BreadController
         return $this->handleIndex();
     }
 
+
     /**
      * View action
      *
@@ -49,7 +51,32 @@ class CommunicationController extends BreadController
      */
     public function viewAction(Communication $entity)
     {
-        return $this->handleView($entity);
+
+        $query          = '[empty query]';
+
+        if(!empty($entity->getCriteria()))
+        {
+
+            $entityFields = $this->getDoctrine()->getManager()->getClassMetadata($entity->getEntityName())->getFieldNames();
+
+            $fields = array_intersect($entityFields  , [
+                'email',
+                'firstName',
+                'lastName',
+                'updatedAt'
+            ]);
+
+            $users = $this->get('ds.communication.manager.communication')->getUsers($entity , null , $fields);
+
+            $entity->setUsers($users);
+        }
+
+        $config = $this->getConfig('entity', $entity);
+
+        return [
+            'entity' => $entity,
+            'context' => $config->get('alias') ?: null
+        ];
     }
 
     /**
