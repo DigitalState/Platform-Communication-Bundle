@@ -8,7 +8,6 @@
 'layout': 'separate'
 } %}
 
-{% import 'OroEmailBundle::macros.html.twig' as _emailMacros %}
 
 {% if entity.id %}
     {% set formAction = path('ds_communication_communication_edit', { id: entity.id }) %}
@@ -51,6 +50,7 @@
     {% endif %}
 {% endblock pageHeader %}
 
+
 {% block content_data %}
     {% set dataBlocks = [] %}
     {% for widget in ds_widgets({ position: 'ds_communication_communication_form', context: context }, { form: form, context: context }) %}
@@ -58,12 +58,12 @@
             title: widget.title|trans,
             subblocks: [ {
                 data : [
-                        widget.content,
-                        _emailMacros.renderAvailableVariablesWidget(form.vars.value.entityName, form.entityName.vars.id)
+                        widget.content
                 ]
             } ]
         } ]) %}
     {% endfor %}
+
     {% set id = 'communication-edit' %}
     {% set data = { dataBlocks: dataBlocks } %}
     {{ parent() }}
