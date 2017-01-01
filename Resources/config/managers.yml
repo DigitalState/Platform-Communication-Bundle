@@ -5,6 +5,7 @@ services:
         arguments:
             - Ds\Bundle\CommunicationBundle\Entity\Channel
             - @doctrine.orm.entity_manager
+
     ds.communication.manager.communication:
         class: Ds\Bundle\CommunicationBundle\Manager\CommunicationManager
         parent: oro_soap.manager.entity_manager.abstract
@@ -13,19 +14,14 @@ services:
             - @doctrine.orm.entity_manager
             - @oro_user.manager
             - @ds.communication.manager.message
-            - @ds.communication.collection.criterion
+
     ds.communication.manager.content:
         class: Ds\Bundle\CommunicationBundle\Manager\ContentManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - Ds\Bundle\CommunicationBundle\Entity\Content
             - @doctrine.orm.entity_manager
-    ds.communication.manager.criterion:
-        class: Ds\Bundle\CommunicationBundle\Manager\CriterionManager
-        parent: oro_soap.manager.entity_manager.abstract
-        arguments:
-            - Ds\Bundle\CommunicationBundle\Entity\Criterion
-            - @doctrine.orm.entity_manager
+
     ds.communication.manager.message:
         class: Ds\Bundle\CommunicationBundle\Manager\MessageManager
         parent: oro_soap.manager.entity_manager.abstract
@@ -34,6 +30,7 @@ services:
             - @doctrine.orm.entity_manager
             - @ds.communication.collection.channel
             - @ds.transport.collection.transport
+
     ds.communication.manager.template:
         class: Ds\Bundle\CommunicationBundle\Manager\TemplateManager
         parent: oro_soap.manager.entity_manager.abstract

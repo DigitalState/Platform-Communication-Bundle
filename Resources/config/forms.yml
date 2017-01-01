@@ -79,34 +79,6 @@ services:
             - @request
             - @doctrine.orm.entity_manager
 
-    ds.communication.form.type.criterion:
-        class: Ds\Bundle\CommunicationBundle\Form\Type\CriterionType
-        arguments:
-            - @ds.communication.collection.criterion
-        tags:
-            - { name: form.type, alias: ds_communication_criterion }
-
-    ds.communication.form.type.api.criterion:
-        class: Ds\Bundle\CommunicationBundle\Form\Type\Api\CriterionType
-        tags:
-            - { name: form.type, alias: ds_communication_api_criterion }
-
-    ds.communication.form.api.criterion:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
-        arguments:
-            - ~
-            - ds_communication_api_criterion
-
-    ds.communication.form.handler.criterion:
-        class: Ds\Bundle\CommunicationBundle\Form\Handler\CriterionHandler
-        scope: request
-        arguments:
-            - @ds.communication.form.api.criterion
-            - @request
-            - @doctrine.orm.entity_manager
-
     ds.communication.form.type.message:
         class: Ds\Bundle\CommunicationBundle\Form\Type\MessageType
         tags:

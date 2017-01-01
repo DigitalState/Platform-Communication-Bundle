@@ -18,6 +18,7 @@ class DsCommunicationBundle implements Migration
     {
         $table = $schema->getTable('ds_comm');
         $table->addColumn('entityName', 'string', ['length' => 255]);
+        $table->addColumn('criteria', 'json_array', ['comment' => '(DC2Type:json_array)']);
 
         $table = $schema->getTable('ds_comm_template');
         $table->addColumn('entityName', 'string', ['length' => 255]);

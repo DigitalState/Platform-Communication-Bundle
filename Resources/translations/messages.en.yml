@@ -183,63 +183,7 @@ ds:
                 entity: Content
                 form: Content
                 owner: Owner
-        criterion:
-            entity_label: Criterion
-            entity_plural_label: Criteria
-            entity_description: The criterion.
-            id:
-                label: ID
-                description: ~
-            created_at:
-                label: Created At
-                description: ~
-            updated_at:
-                label: Updated At
-                description: ~
-            communication:
-                label: Communication
-                description: ~
-                placeholder: Select Communication
-                title:
-                    label: Communication
-            implementation:
-                label: Implementation
-                description: ~
-            operand_1:
-                label: Operand 1
-                description: ~
-            operator:
-                label: Operator
-                description: ~
-            operand_2:
-                label: Operand 2
-                description: ~
-            owner:
-                label: Business Unit
-                description: ~
-            collection:
-                column: Column
-            menu:
-                tab:
-                    label: Criteria
-                index:
-                    label: Criteria
-            page:
-                index:
-                    title: Criteria
-                view: ~
-                edit: ~
-            grid:
-                actions:
-                    view: View
-                    update: Edit
-                    delete: Delete
-            button:
-                create: Create Criterion
-            widget:
-                entity: Criterion
-                form: Criterion
-                owner: Owner
+
         message:
             entity_label: Message
             entity_plural_label: Messages

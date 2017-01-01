@@ -183,24 +183,7 @@ datagrid:
             communication_title:
                 renderable: false
         filters: ~
-    ds-communication-communication-criterion:
-        extends: ds-communication-criterion
-        options:
-            toolbarOptions:
-                hide: true
-                pagination:
-                    onePage: true
-        source:
-            query:
-                where:
-                    and:
-                        - c.communication = :communication
-            bind_parameters:
-                - communication
-        columns:
-            communication_title:
-                renderable: false
-        filters: ~
+
     ds-communication-content:
         extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Content
         source:
@@ -325,103 +308,7 @@ datagrid:
                 link: delete_link
                 icon: trash
                 acl_resource: ds.communication.content.delete
-    ds-communication-criterion:
-        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Criterion
-        source:
-            acl_resource: ds.communication.criterion.view
-            type: orm
-            query:
-                select:
-                    - c.id
-                    - c.implementation
-                    - c2.title as communication_title
-                    - c.createdAt
-                    - c.updatedAt
-                from:
-                    - { table: DsCommunicationBundle:Criterion, alias: c }
-                join:
-                    left:
-                        - { join: c.communication, alias: c2 }
-        inline_editing:
-            enable: true
-        columns:
-            id:
-                label: ds.communication.criterion.id.label
-            communication_title:
-                label: ds.communication.criterion.communication.title.label
-            implementation:
-                label: ds.communication.criterion.implementation.label
-            createdAt:
-                label: ds.communication.criterion.created_at.label
-                frontend_type: datetime
-            updatedAt:
-                label: ds.communication.criterion.updated_at.label
-                frontend_type: datetime
-        properties:
-            id: ~
-            update_link:
-                type: url
-                route: ds_communication_criterion_edit
-                params:
-                    - id
-            view_link:
-                type: url
-                route: ds_communication_criterion_view
-                params:
-                    - id
-            delete_link:
-                type: url
-                route: ds_communication_api_rest_delete_criterion
-                params:
-                    - id
-        sorters:
-            columns:
-                id:
-                    data_name: c.id
-                communication_title:
-                    data_name: c2.title
-                implementation:
-                    data_name: c.implementation
-                createdAt:
-                    data_name: c.createdAt
-                updatedAt:
-                    data_name: c.updatedAt
-            default:
-                id: ASC
-        filters:
-            columns:
-                communication_title:
-                    type: string
-                    data_name: c2.title
-                implementation:
-                    type: string
-                    data_name: c.implementation
-                createdAt:
-                    type: datetime
-                    data_name: c.createdAt
-                updatedAt:
-                    type: datetime
-                    data_name: c.updatedAt
-        actions:
-            view:
-                type: navigate
-                label: ds.communication.criterion.grid.actions.view
-                link: view_link
-                icon: eye-open
-                acl_resource: ds.communication.criterion.view
-                rowAction: true
-            update:
-                type: navigate
-                label: ds.communication.criterion.grid.actions.update
-                link: update_link
-                icon: edit
-                acl_resource: ds.communication.criterion.edit
-            delete:
-                type: delete
-                label: ds.communication.criterion.grid.actions.delete
-                link: delete_link
-                icon: trash
-                acl_resource: ds.communication.criterion.delete
+
     ds-communication-message:
         extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Message
         source:

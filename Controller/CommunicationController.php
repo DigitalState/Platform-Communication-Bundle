@@ -8,6 +8,7 @@ use Ds\Bundle\CommunicationBundle\Entity\Communication;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Symfony\Component\HttpFoundation\Response;
 use Twilio\Rest\Api\V2010\Account\MessageList;
 
 /**
@@ -83,9 +84,8 @@ class CommunicationController extends BreadController
      * Send action
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $entity
-     * @return array
+     * @return Response|array
      * @Route("/send/{id}", requirements={"id":"\d+"}, defaults={"id":0})
-     * @Template()
      * @AclAncestor("ds.communication.communication.edit")
      */
     public function sendAction(Communication $entity)

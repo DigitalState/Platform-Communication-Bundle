@@ -52,10 +52,6 @@ class ContentType extends AbstractType
                 return preg_replace('/.*\x5c([^\x5c\s]*) (.*)/', '$1 -> $2', $value); //  \x5c = '\'
             },
             'placeholder' => 'ds.communication.content.template.placeholder',
-
-//            'depends_on_parent_field' => 'marketingList',
-//            'data_route' => 'orocrm_api_get_emailcampaign_email_templates',
-//            'data_route_parameter' => 'id'
         ]);
 
         $builder->add('presentation', 'oro_rich_text', [

@@ -7,7 +7,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Ds\Bundle\CommunicationBundle\Entity\Communication;
 use Ds\Bundle\CommunicationBundle\Entity\Channel;
-use Ds\Bundle\CommunicationBundle\Collection\CriterionCollection;
 
 /**
  * Class CommunicationManager
@@ -25,26 +24,19 @@ class CommunicationManager extends ApiEntityManager
     protected $messageManager;
 
     /**
-     * @var \Ds\Bundle\CommunicationBundle\Collection\CriterionCollection
-     */
-    protected $criterionCollection;
-
-    /**
      * Constructor
      *
      * @param string $class
      * @param \Doctrine\Common\Persistence\ObjectManager $om
      * @param \Oro\Bundle\UserBundle\Entity\UserManager $userManager
      * @param \Ds\Bundle\CommunicationBundle\Manager\MessageManager $messageManager
-     * @param \Ds\Bundle\CommunicationBundle\Collection\CriterionCollection $criterionCollection
      */
-    public function __construct($class, ObjectManager $om, UserManager $userManager, MessageManager $messageManager, CriterionCollection $criterionCollection)
+    public function __construct($class, ObjectManager $om, UserManager $userManager, MessageManager $messageManager)
     {
         parent::__construct($class, $om);
 
         $this->userManager = $userManager;
         $this->messageManager = $messageManager;
-        $this->criterionCollection = $criterionCollection;
     }
 
     /**
@@ -56,10 +48,10 @@ class CommunicationManager extends ApiEntityManager
     public function send(Communication $communication)
     {
         $contents = $communication->getContents();
-        $criteria = $communication->getCriteria();
 
         foreach ($contents as $content) {
-            $users = $this->getUsers($criteria, $content->getChannel());
+
+            $users = $this->getUsers($content->getChannel());
 
             foreach ($users as $user) {
                 $message = $this->messageManager->createEntity();
@@ -83,24 +75,11 @@ class CommunicationManager extends ApiEntityManager
      * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
      * @return array
      */
-    public function getUsers(array $criteria, Channel $channel = null)
+    public function getUsers(Channel $channel = null)
     {
-        if (!$criteria) {
-            return [];
-        }
+        // @todo
 
         $query = $this->om->createQueryBuilder();
-        $query
-            ->select([ 'u' ])
-            ->from('\\Oro\\Bundle\\UserBundle\\Entity\\User', 'u');
-
-        foreach ($criteria as $criterion) {
-            $definition = $this->criterionCollection->filter(function($item) use ($criterion) {
-                return $item['implementation'] == $criterion->getImplementation();
-            })->first()['criterion'];
-
-            $definition->aggregate($query, $criterion, $channel);
-        }
 
         return $query->getQuery()->getResult();
     }

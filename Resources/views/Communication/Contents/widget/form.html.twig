@@ -1,7 +1,12 @@
+{% import 'OroEmailBundle::macros.html.twig' as _emailMacros %}
+
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ form_widget(form.contents) }}
+            
+            {# @todo this is not at the right place #}
+            {{ _emailMacros.renderAvailableVariablesWidget(form.vars.value.entityName, form.entityName.vars.id)  |raw }}
         </div>
     </div>
     {% for widget in ds_widgets({ position: 'ds_communication_communication_form_contents', context: context }, { form: form }) %}

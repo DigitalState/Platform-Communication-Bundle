@@ -53,12 +53,6 @@ services:
         tags:
             - { name: ds.widget, position: ds_communication_communication_form }
 
-    ds.communication.widget.communication.criteria.grid:
-        parent: ds.widget.widget.abstract
-        class: Ds\Bundle\CommunicationBundle\Widget\Communication\Criteria\GridWidget
-        tags:
-            - { name: ds.widget, position: ds_communication_communication_entity }
-
     ds.communication.widget.communication.users.grid:
         parent: ds.widget.widget.abstract
         class: Ds\Bundle\CommunicationBundle\Widget\Communication\Users\GridWidget
@@ -84,24 +78,6 @@ services:
         class: Ds\Bundle\CommunicationBundle\Widget\Content\OwnerWidget
         tags:
             - { name: ds.widget, position: ds_communication_content_form }
-
-    ds.communication.widget.criterion.entity:
-        parent: ds.widget.widget.abstract
-        class: Ds\Bundle\CommunicationBundle\Widget\Criterion\EntityWidget
-        tags:
-            - { name: ds.widget, position: ds_communication_criterion_entity }
-
-    ds.communication.widget.criterion.form:
-        parent: ds.widget.widget.abstract
-        class: Ds\Bundle\CommunicationBundle\Widget\Criterion\FormWidget
-        tags:
-            - { name: ds.widget, position: ds_communication_criterion_form }
-
-    ds.communication.widget.criterion.owner:
-        parent: ds.widget.widget.abstract
-        class: Ds\Bundle\CommunicationBundle\Widget\Criterion\OwnerWidget
-        tags:
-            - { name: ds.widget, position: ds_communication_criterion_form }
 
     ds.communication.widget.message.entity:
         parent: ds.widget.widget.abstract

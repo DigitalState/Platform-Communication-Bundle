@@ -108,44 +108,10 @@ class Communication
     # endregion
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Ds\Bundle\CommunicationBundle\Entity\Criterion", mappedBy="communication", cascade={"persist", "remove"})
+     * @ORM\Column(type="json_array")
      */
     protected $criteria; # region accessors
 
-    /**
-     * Add criterion
-     *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Criterion $criterion
-     * @return \Ds\Bundle\CommunicationBundle\Entity\Communication
-     */
-    public function addCriterion(Criterion $criterion)
-    {
-        $criterion->setCommunication($this);
-        $this->criteria[] = $criterion;
-
-        return $this;
-    }
-
-    /**
-     * Remove criterion
-     *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Criterion $criterion
-     */
-    public function removeCriterion(Criterion $criterion)
-    {
-        $this->criteria->removeElement($criterion);
-    }
-
-    /**
-     * Get criteria
-     *
-     * @return array
-     */
-    public function getCriteria()
-    {
-        return $this->criteria->toArray();
-    }
 
     # endregion
 
@@ -155,6 +121,21 @@ class Communication
     public function __construct()
     {
         $this->contents = new ArrayCollection;
-        $this->criteria = new ArrayCollection;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
+    }
+
+    /**
+     * @param mixed $criteria
+     */
+    public function setCriteria($criteria)
+    {
+        $this->criteria = $criteria;
     }
 }
