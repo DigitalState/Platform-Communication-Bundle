@@ -13,6 +13,7 @@
     ],
     "require": {
         "php": ">=5.6",
+        "oro/platform": "1.10.*",
         "digitalstate/platform-admin-bundle" : "dev-master",
         "digitalstate/platform-data-bundle" : "dev-master",
         "digitalstate/platform-entity-bundle" : "dev-master",
