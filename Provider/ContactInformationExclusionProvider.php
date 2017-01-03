@@ -45,7 +45,7 @@ class ContactInformationExclusionProvider extends AbstractExclusionProvider
     {
         /// @see Ds\Bundle\CommunicationBundle\Channel\Channel::canSendTo()
         if (! $config->has('contact_information')) {
-            return false;
+            //return false;
         }
 
         return

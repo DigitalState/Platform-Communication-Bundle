@@ -88,12 +88,17 @@ class CommunicationManager extends ApiEntityManager
 
                 $message
                     ->setCommunication($communication)
-                    ->setRecipient($recipient)
+                    ->setContent($content)
                     ->setChannel($content->getChannel())
+                    ->setProfile($content->getProfile())
+                    ->setRecipient($recipient)
                     ->setTitle($content->getTitle())
                     ->setPresentation($content->getPresentation());
 
-                $this->messageManager->send($message, $recipient, $content->getProfile());
+                $message = $this->messageManager->send($message, $recipient, $content->getProfile());
+
+                $this->om->persist($message);
+                $this->om->flush();
             }
         }
 

@@ -4,6 +4,7 @@ namespace Ds\Bundle\CommunicationBundle\Entity;
 
 use Ds\Bundle\EntityBundle\Entity\Attribute;
 use Ds\Bundle\TransportBundle\Entity\Attribute as TransportAttribute;
+use Ds\Bundle\TransportBundle\Entity\Profile;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
 
@@ -100,6 +101,10 @@ class Message
     # endregion
 
 
+    /**
+     * @var string
+     * @ORM\Column(name="message_uid", type="string", length=255)
+     */
     protected $message_uid = ''; #region accessors
 
     /**
@@ -121,6 +126,71 @@ class Message
 
         return $this;
     }
+
+
+    # endregion
+
+
+    /**
+     * @var Profile
+     * @ORM\ManyToOne(targetEntity="Ds\Bundle\TransportBundle\Entity\Profile" )
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+
+     */
+    protected $profile; # region accessors
+
+    /**
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+
+    /**
+     * @param Profile $profile
+     *
+     * @return Message
+     */
+    public function setProfile(Profile $profile)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+    # endregion
+
+    /**
+     * @var Content
+     * @ORM\ManyToOne(targetEntity="Ds\Bundle\CommunicationBundle\Entity\Content")
+     * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
+
+     */
+    protected $content;  # region accessors
+
+    /**
+     * @return Content
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param Content $content
+     *
+     * @return Message
+     */
+    public function setContent(Content $content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+
+
     # endregion
 
     /**

@@ -46,10 +46,10 @@ class MessageManager extends ApiEntityManager
     /**
      * Send message
      *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Message $message
+     * @param Message $message
      * @param \Ds\Bundle\TransportBundle\Entity\Profile     $profile
      *
-     * @return \Ds\Bundle\CommunicationBundle\Manager\MessageManager
+     * @return Message
      */
     public function send(Message $message, $recipient,  Profile $profile)
     {
@@ -74,8 +74,7 @@ class MessageManager extends ApiEntityManager
             $message = $channel->send($message, $recipient);
         }
 
-        $this->om->persist($message);
-        $this->om->flush();
-        return $this;
+
+        return $message;
     }
 }
