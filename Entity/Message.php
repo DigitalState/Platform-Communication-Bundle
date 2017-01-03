@@ -3,12 +3,13 @@
 namespace Ds\Bundle\CommunicationBundle\Entity;
 
 use Ds\Bundle\EntityBundle\Entity\Attribute;
+use Ds\Bundle\TransportBundle\Entity\Attribute as TransportAttribute;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
-use Oro\Bundle\UserBundle\Entity\User;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Bridge\Doctrine\Validator\Constraints as ORMAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -64,6 +65,7 @@ class Message
     use Attribute\SentAt;
 
     use Ownership\BusinessUnitAwareTrait;
+    use TransportAttribute\DeliveryStatus;
 
     /**
      * @var \Ds\Bundle\CommunicationBundle\Entity\Communication
@@ -97,36 +99,74 @@ class Message
 
     # endregion
 
-    /**
-     * @var \Oro\Bundle\UserBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected $user; # region accessors
+
+    protected $message_uid = ''; #region accessors
 
     /**
-     * Set user
-     *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @return \Ds\Bundle\CommunicationBundle\Entity\Message
+     * @return string
      */
-    public function setUser(User $user = null)
+    public function getMessageUID()
     {
-        $this->user = $user;
+        return $this->message_uid;
+    }
+
+    /**
+     * @param string $message_uid
+     *
+     * @return Message
+     */
+    public function setMessageUID(string $message_uid)
+    {
+        $this->message_uid = $message_uid;
+
+        return $this;
+    }
+    # endregion
+
+    /**
+     * @var string
+     * @ORM\Column(name="recipient_entity_name", type="string", length=255)
+     */
+    protected $recipientEntityName;
+
+    /**
+     * @var int
+     * @ORM\Column(name="recipient_entity_id", type="integer")
+     */
+    protected $recipientEntityId;
+
+    /**
+     * Sets the entity class and id
+     *
+     * @param object $entity
+     */
+    public function setRecipient(EmailHolderInterface $entity)
+    {
+        $this->recipientEntityName = ClassUtils::getClass($entity);
+        $this->recipientEntityId   = $entity->getId();
 
         return $this;
     }
 
     /**
-     * Get user
+     * Returns the tagged resource type
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return string
      */
-    public function getUser()
+    public function getRecipientEntityName()
     {
-        return $this->user;
+        return $this->recipientEntityName;
     }
 
+    /**
+     * Returns the tagged resource id
+     *
+     * @return int
+     */
+    public function getRecipientEntityId()
+    {
+        return $this->recipientEntityId;
+    }
     # endregion
 
     /**
@@ -160,4 +200,30 @@ class Message
     }
 
     # endregion
+
+
+
+    protected $recipientFullName = '';
+
+    /**
+     * @return string
+     */
+    public function getRecipientFullName(): string
+    {
+        return $this->recipientFullName;
+    }
+
+    /**
+     * @param string $recipientFullName
+     *
+     * @return Message
+     */
+    public function setRecipientFullName(string $recipientFullName): Message
+    {
+        $this->recipientFullName = $recipientFullName;
+
+        return $this;
+    }
+
+
 }

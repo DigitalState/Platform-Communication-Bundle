@@ -25,11 +25,19 @@ interface Channel
      */
     public function getTransport();
 
+
+    /**
+     * @param $recipient
+     *
+     * @return bool
+     */
+    public function canSendTo($recipient);
+
     /**
      * Send message
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Message $message
-     * @return \Ds\Bundle\CommunicationBundle\Channel\Channel
+     * @return \Ds\Bundle\CommunicationBundle\Entity\Message
      */
-    public function send(Message $message);
+    public function send(Message $message , $recipient);
 }

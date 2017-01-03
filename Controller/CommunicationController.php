@@ -119,6 +119,7 @@ class CommunicationController extends BreadController
     {
         $manager = $this->get('ds.communication.manager.communication');
         $manager->send($entity);
+
         $this->addFlash('success', 'ds.communication.action.sent', true);
         $meta = $this->getMetaByAlias('');
 

@@ -6,6 +6,9 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Ds\Bundle\CommunicationBundle\Entity\Content;
 use Ds\Bundle\CommunicationBundle\Entity\Message;
+use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
+use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Query\DynamicSegmentQueryBuilder;
@@ -76,19 +79,21 @@ class CommunicationManager extends ApiEntityManager
         /** @var Content $content */
         foreach ($contents as $content) {
 
-            $users = $this->getUsers($communication, $content->getChannel());
+            $recipients = $this->getUsers($communication, $content->getChannel());
 
-            foreach ($users as $user) {
+            foreach ($recipients as $recipient) {
+
                 /** @var Message $message */
                 $message = $this->messageManager->createEntity();
+
                 $message
                     ->setCommunication($communication)
-                    ->setUser($user)
+                    ->setRecipient($recipient)
                     ->setChannel($content->getChannel())
                     ->setTitle($content->getTitle())
                     ->setPresentation($content->getPresentation());
 
-                $this->messageManager->send($message, $content->getProfile());
+                $this->messageManager->send($message, $recipient, $content->getProfile());
             }
         }
 
@@ -116,7 +121,9 @@ class CommunicationManager extends ApiEntityManager
 
             $alias = current($qb->getDQLPart('from'))->getAlias();
 
+            $qb->resetDQLPart('select');
             $qb->addSelect($alias );
+
             foreach($extraFields as $field)
             {
                 $qb->addSelect($alias  . '.' . $field);

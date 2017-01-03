@@ -7,4 +7,15 @@ namespace Ds\Bundle\CommunicationBundle\Channel;
  */
 class PortalChannel extends AbstractChannel
 {
+
+
+    /**
+     * @param $recipient
+     *
+     * @return bool
+     */
+    public function canSendTo($recipient)
+    {
+        return true;
+    }
 }

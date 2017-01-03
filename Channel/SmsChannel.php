@@ -7,4 +7,17 @@ namespace Ds\Bundle\CommunicationBundle\Channel;
  */
 class SmsChannel extends AbstractChannel
 {
+
+
+    /**
+     * @param $recipient
+     *
+     * @return bool
+     */
+    public function canSendTo($recipient)
+    {
+        /// @todo
+        return true;
+    }
+
 }
