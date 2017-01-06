@@ -23,7 +23,7 @@
         "digitalstate/platform-widget-bundle" : "dev-master"
     },
     "autoload": {
-        "psr-4": { "Ds\\Bundle\\CommunicationBundle": "" }
+        "psr-4": { "Ds\\Bundle\\CommunicationBundle\\": "" }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
