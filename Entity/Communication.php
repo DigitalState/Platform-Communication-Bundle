@@ -56,6 +56,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Communication
 {
+    const GRID_PREFIX = 'oro_communication_results_grid_';
+
+
     use Attribute\Id;
     use Attribute\CreatedAt;
     use Attribute\UpdatedAt;
@@ -70,7 +73,7 @@ class Communication
     /**
      * @return array
      */
-    public function getUsers(): array
+    public function getUsers()
     {
         return $this->users;
     }
@@ -78,7 +81,7 @@ class Communication
     /**
      * @param array $users
      */
-    public function setUsers(array $users)
+    public function setUsers($users)
     {
         $this->users = $users;
         return $this;

@@ -112,7 +112,7 @@ class CommunicationManager extends ApiEntityManager
      * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
      * @return QueryBuilder
      */
-    public function getCriteriaQueryBuilder(Communication $communication, $extraFields = [])
+    public function getCriteriaQueryBuilder(Communication $communication)
     {
         $segment = new Segment();
         $segment->setOrganization($communication->getOrganization());
@@ -128,11 +128,6 @@ class CommunicationManager extends ApiEntityManager
 
             $qb->resetDQLPart('select');
             $qb->addSelect($alias );
-
-            foreach($extraFields as $field)
-            {
-                $qb->addSelect($alias  . '.' . $field);
-            }
 
             $organizationField = $this->ownershipMetadataProvider
                 ->getMetadata($segment->getEntity())

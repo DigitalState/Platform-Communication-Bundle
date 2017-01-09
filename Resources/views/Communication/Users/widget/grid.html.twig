@@ -1,32 +1,28 @@
 
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
+{% set gridName = context.gridName  %}
 
-{#
-{{ service_container.get('asdf') }}
-{% set gridName = 'ds_communication_users_list_items_grid_' ~ entity.id  %}
-{% set itemsGridName = gridName ~ '_items' %}
-{% set itemsMixin = 'ds-communication-users-items-mixin' %}
-
-{{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': itemsMixin}) }}
-#}
-
-{# @todo datagrid !! #}
-{% for u in entity.users %}
-    {% set user = u[0] %}
-    <li>
-        {% if user.firstName  is defined %}
-            {{ user.firstName }}
+    {% if gridName is defined and gridName %}
+        {% set renderParams = renderParams|default({})|merge({enableViews: false}) %}
+        {% set gridParams =  {
+        '_grid_view': {'_disabled': true},
+        '_tags'     : {'_disabled': true}
+        } %}
+        {% if oro_config_value('oro_report.display_sql_query') %}
+            {% set gridParams = gridParams|merge({'display_sql_query': true}) %}
         {% endif %}
+        {% set params = params|default({})|merge(gridParams) %}
+        {{ dataGrid.renderGrid(gridName, params, renderParams) }}
+    {% else %}
+        <div class="container-fluid">
+            <div class="grid-container">
+                <div class="no-data">
+                    <span>{{ 'Invalid segment configuration'|trans }}</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
-        {% if user.lastName  is defined %}
-            {{ user.lastName }}
-        {% endif %}
 
-        {% if user.emails  is defined %}
-            {{ user.emails |join(', ') }}
-        {% endif %}
-    </li>
 
-{% else %}
-    [[ empty list]]
-{% endfor %}

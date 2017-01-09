@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CommunicationController extends BreadController
 {
+
     /**
      * Constructor
      */
@@ -44,6 +45,7 @@ class CommunicationController extends BreadController
      * View action
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $entity
+     *
      * @return array
      * @Route("/view/{id}", requirements={"id"="\d+"})
      * @Template()
@@ -52,21 +54,11 @@ class CommunicationController extends BreadController
     public function viewAction(Communication $entity)
     {
 
-        $query          = '[empty query]';
+        $query = '[empty query]';
 
-        if(!empty($entity->getCriteria()))
+        if ( !empty($entity->getCriteria()))
         {
-
-            $entityFields = $this->getDoctrine()->getManager()->getClassMetadata($entity->getEntityName())->getFieldNames();
-
-            $fields = array_intersect($entityFields  , [
-                'email',
-                'firstName',
-                'lastName',
-                'updatedAt'
-            ]);
-
-            $users = $this->get('ds.communication.manager.communication')->getUsers($entity , null , $fields);
+            $users = $this->get('ds.communication.manager.communication')->getUsers($entity, null);
 
             $entity->setUsers($users);
         }
@@ -74,8 +66,11 @@ class CommunicationController extends BreadController
         $config = $this->getConfig('entity', $entity);
 
         return [
-            'entity' => $entity,
-            'context' => $config->get('alias') ?: null
+            'entity'  => $entity,
+            'context' => [
+                'alias'    => $config->get('alias') ? : null,
+                'gridName' => Communication::GRID_PREFIX . $entity->getId(),
+            ],
         ];
     }
 
@@ -83,6 +78,7 @@ class CommunicationController extends BreadController
      * Create action
      *
      * @param string $alias
+     *
      * @return array
      * @Route("/create/{alias}", requirements={"alias":"[a-z]*"}, defaults={"alias":""})
      * @Template("DsCommunicationBundle:Communication:edit.html.twig")
@@ -97,6 +93,7 @@ class CommunicationController extends BreadController
      * Edit action
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $entity
+     *
      * @return array
      * @Route("/update/{id}", requirements={"id":"\d+"}, defaults={"id":0})
      * @Template()
@@ -111,6 +108,7 @@ class CommunicationController extends BreadController
      * Send action
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $entity
+     *
      * @return Response|array
      * @Route("/send/{id}", requirements={"id":"\d+"}, defaults={"id":0})
      * @AclAncestor("ds.communication.communication.edit")
@@ -124,5 +122,32 @@ class CommunicationController extends BreadController
         $meta = $this->getMetaByAlias('');
 
         return $this->redirectToRoute($meta->getRoute('view'), [ 'id' => $entity->getId() ]);
+    }
+
+
+    /**
+     * @Route("/view/widget/{id}/recipient/{recipient}", name="ds_communication_widget_preview_content")
+     * @Template()
+     *
+     * @param string  $entityClass The entity class which activities should be rendered
+     * @param integer $entityId    The entity object id which activities should be rendered
+     *
+     * @return array
+     */
+    public function widgetAction(Communication $communication, $recipient)
+    {
+        $entity = $this->getEntityRoutingHelper()->getEntity($entityClass, $entityId);
+
+        /** @var ActivityListChainProvider $activitiesProvider */
+        $activitiesProvider = $this->get('oro_activity_list.provider.chain');
+
+        /** @var DateTimeRangeFilter $dateRangeFilter */
+        $dateRangeFilter = $this->get('oro_filter.datetime_range_filter');
+
+        return [
+            'entity'                  => $entity,
+            'configuration'           => $activitiesProvider->getActivityListOption($this->get('oro_config.user')),
+            'dateRangeFilterMetadata' => $dateRangeFilter->getMetadata(),
+        ];
     }
 }

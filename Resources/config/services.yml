@@ -17,3 +17,17 @@ services:
         parent: oro_query_designer.entity_provider
         calls:
             - [setExclusionProvider,  ["@ds.communication.provider.chain_exclusion"]]
+
+
+    ds.communication.grid.datagrid_configuration_builder:
+        class: Ds\Bundle\CommunicationBundle\Grid\CommunicationDatagridConfigurationBuilder
+        parent: oro_report.grid.base_configuration_builder
+
+
+    ds.communication.datagrid.configuration.provider:
+        class: Ds\Bundle\CommunicationBundle\Grid\ConfigurationProvider
+        arguments:
+            - '@ds.communication.grid.datagrid_configuration_builder'
+            - '@doctrine'
+        tags:
+            - { name: oro_datagrid.configuration.provider, priority: 10 }
