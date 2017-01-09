@@ -43,6 +43,7 @@ class ContentType extends AbstractType
             'label' => 'ds.communication.content.title.label'
         ]);
 
+        /*
         $builder->add('template', 'entity', [
             'label' => 'ds.communication.content.template.label',
             'class' => 'DsCommunicationBundle:Template',
@@ -53,6 +54,7 @@ class ContentType extends AbstractType
             },
             'placeholder' => 'ds.communication.content.template.placeholder',
         ]);
+        */
 
         $builder->add('presentation', 'oro_rich_text', [
             'label' => 'ds.communication.content.presentation.label'
