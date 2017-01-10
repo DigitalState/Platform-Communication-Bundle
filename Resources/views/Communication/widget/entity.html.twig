@@ -6,6 +6,15 @@
             {{ UI.renderProperty('ds.communication.id.label'|trans, entity.id) }}
             {{ UI.renderProperty('ds.communication.title.label'|trans, entity.title) }}
             {{ UI.renderProperty('ds.communication.description.label'|trans, entity.description) }}
+
+        </div>
+
+        <div class="responsive-block">
+            {% for s,cnt in context.sending_status_stats %}
+                {{ UI.renderProperty(s, cnt) }}
+            {% else %}
+                <li>No statistics yet</li>
+            {% endfor %}
         </div>
     </div>
     {% for widget in ds_widgets({ position: 'ds_communication_communication_entity_communication', context: context }, { entity: entity }) %}

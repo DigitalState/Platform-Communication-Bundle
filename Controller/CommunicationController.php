@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Ds\Bundle\AdminBundle\Controller\BreadController;
 use Ds\Bundle\CommunicationBundle\Entity\Communication;
 
+use Ds\Bundle\TransportBundle\Entity\Profile;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -63,6 +64,8 @@ class CommunicationController extends BreadController
             $entity->setUsers($users);
         }
 
+        $statuses_cnt = $this->getDoctrine()->getRepository('DsCommunicationBundle:Communication')->getCommunicationStatus($entity);
+
         $config = $this->getConfig('entity', $entity);
 
         return [
@@ -70,6 +73,7 @@ class CommunicationController extends BreadController
             'context' => [
                 'alias'    => $config->get('alias') ? : null,
                 'gridName' => Communication::GRID_PREFIX . $entity->getId(),
+                'sending_status_stats' => $statuses_cnt,
             ],
         ];
     }
@@ -124,30 +128,4 @@ class CommunicationController extends BreadController
         return $this->redirectToRoute($meta->getRoute('view'), [ 'id' => $entity->getId() ]);
     }
 
-
-    /**
-     * @Route("/view/widget/{id}/recipient/{recipient}", name="ds_communication_widget_preview_content")
-     * @Template()
-     *
-     * @param string  $entityClass The entity class which activities should be rendered
-     * @param integer $entityId    The entity object id which activities should be rendered
-     *
-     * @return array
-     */
-    public function widgetAction(Communication $communication, $recipient)
-    {
-        $entity = $this->getEntityRoutingHelper()->getEntity($entityClass, $entityId);
-
-        /** @var ActivityListChainProvider $activitiesProvider */
-        $activitiesProvider = $this->get('oro_activity_list.provider.chain');
-
-        /** @var DateTimeRangeFilter $dateRangeFilter */
-        $dateRangeFilter = $this->get('oro_filter.datetime_range_filter');
-
-        return [
-            'entity'                  => $entity,
-            'configuration'           => $activitiesProvider->getActivityListOption($this->get('oro_config.user')),
-            'dateRangeFilterMetadata' => $dateRangeFilter->getMetadata(),
-        ];
-    }
 }
