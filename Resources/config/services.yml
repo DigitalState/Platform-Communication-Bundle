@@ -31,3 +31,23 @@ services:
             - '@doctrine'
         tags:
             - { name: oro_datagrid.configuration.provider, priority: 10 }
+
+
+    ds.communication.message_event.delivery_status.handler:
+        class: Ds\Bundle\CommunicationBundle\Provider\DeliveryStatusUpdateHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: ds.communication.message_event.handler, priority: 10 }
+
+
+    ds.communication.message_event.click_track.handler:
+        class: Ds\Bundle\CommunicationBundle\Provider\TrackClicksHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: ds.communication.message_event.handler, priority: 11 }
+
+
+
+

@@ -1,3 +1,6 @@
 services:
     ds.communication.collection.channel:
         class: Ds\Bundle\CommunicationBundle\Collection\ChannelCollection
+
+    ds.communication.collection.message_event_handler:
+        class: Ds\Bundle\CommunicationBundle\Collection\MessageEventHandlerCollection

@@ -2,6 +2,7 @@
 
 namespace Ds\Bundle\CommunicationBundle;
 
+use Ds\Bundle\CommunicationBundle\DependencyInjection\Compiler\MessageEventPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Ds\Bundle\CommunicationBundle\DependencyInjection\Compiler\ChannelPass;
@@ -19,6 +20,7 @@ class DsCommunicationBundle extends Bundle
         parent::build($container);
 
         $container
-            ->addCompilerPass(new ChannelPass);
+            ->addCompilerPass(new ChannelPass)
+            ->addCompilerPass(new MessageEventPass());
     }
 }
