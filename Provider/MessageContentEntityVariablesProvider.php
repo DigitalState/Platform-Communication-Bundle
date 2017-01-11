@@ -39,15 +39,18 @@ class MessageContentEntityVariablesProvider implements MessageContentBuilderInte
 
     public function compileMessage(Message $message, $recipient, ContentTemplate $contentTemplate)
     {
-        list($subject, $content) = $this->emailRenderer->compileMessage(
-            $contentTemplate,
-            [ 'entity' => $recipient ]
-        );
+        $templateParams = [
+            'entity' => $recipient,
+            //@todo add 'sender' variable replacement
+        ];
+
+        $subject = $this->emailRenderer->renderWithDefaultFilters($contentTemplate->getSubject(), $templateParams);
+        $content = $this->emailRenderer->renderWithDefaultFilters($contentTemplate->getContent(), $templateParams);
 
         $contentTemplate->setSubject($subject);
         $contentTemplate->setContent($content);
 
-        return $contentTemplate ;
+        return $contentTemplate;
     }
 
 }
