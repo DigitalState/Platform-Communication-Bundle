@@ -33,6 +33,7 @@ services:
             - { name: oro_datagrid.configuration.provider, priority: 10 }
 
 
+    # Message Event Handlers
     ds.communication.message_event.delivery_status.handler:
         class: Ds\Bundle\CommunicationBundle\Provider\DeliveryStatusUpdateHandler
         arguments:
@@ -47,6 +48,17 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: ds.communication.message_event.handler, priority: 11 }
+
+
+    # Message Content Builders
+    ds.communication.message_content.entities_variables.builder:
+        class: Ds\Bundle\CommunicationBundle\Provider\MessageContentEntityVariablesProvider
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - "@oro_email.email_renderer"
+
+        tags:
+            - { name: ds.communication.message_content.builder, priority: 10 }
 
 
 

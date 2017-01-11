@@ -40,14 +40,14 @@ class TrackClicksHandler implements MessageEventHandlerInterface
         if ( !( $event instanceof UrlTrackingMessageEvent ))
             return;
 
-        if($event->getEventType() !== 'click')
+        if ($event->getEventType() !== 'click')
             return;
 
         /** @var UrlTrackingMessageEvent $urlEvent */
         $urlEvent = $event;
 
+        // @todo record event !!
 
-
-
+        return true;
     }
 }

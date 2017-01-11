@@ -4,8 +4,10 @@ namespace Ds\Bundle\CommunicationBundle\Manager;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Ds\Bundle\CommunicationBundle\Collection\MessageContentBuilderCollection;
 use Ds\Bundle\CommunicationBundle\Entity\Content;
 use Ds\Bundle\CommunicationBundle\Entity\Message;
+use Ds\Bundle\CommunicationBundle\Model\ContentTemplate;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
@@ -23,6 +25,7 @@ use Ds\Bundle\CommunicationBundle\Entity\Channel;
  */
 class CommunicationManager extends ApiEntityManager
 {
+
     /**
      * @var \Oro\Bundle\UserBundle\Entity\UserManager
      */
@@ -44,32 +47,40 @@ class CommunicationManager extends ApiEntityManager
     protected $ownershipMetadataProvider;
 
     /**
+     * @var MessageContentBuilderCollection
+     */
+    protected $messageContentBuilderCollection;
+
+    /**
      * Constructor
      *
-     * @param string $class
-     * @param \Doctrine\Common\Persistence\ObjectManager $om
-     * @param \Oro\Bundle\UserBundle\Entity\UserManager $userManager
+     * @param string                                                $class
+     * @param \Doctrine\Common\Persistence\ObjectManager            $om
+     * @param \Oro\Bundle\UserBundle\Entity\UserManager             $userManager
      * @param \Ds\Bundle\CommunicationBundle\Manager\MessageManager $messageManager
      */
     public function __construct($class,
                                 ObjectManager $om,
                                 UserManager $userManager,
                                 MessageManager $messageManager,
+                                MessageContentBuilderCollection $messageContentBuilderCollection,
                                 DynamicSegmentQueryBuilder $dynamicSegmentQueryBuilder,
-                                OwnershipMetadataProvider $ownershipMetadataProvider    )
+                                OwnershipMetadataProvider $ownershipMetadataProvider)
     {
         parent::__construct($class, $om);
 
-        $this->userManager = $userManager;
-        $this->messageManager = $messageManager;
-        $this->dynamicSegmentQueryBuilder = $dynamicSegmentQueryBuilder;
-        $this->ownershipMetadataProvider = $ownershipMetadataProvider;
+        $this->userManager                     = $userManager;
+        $this->messageManager                  = $messageManager;
+        $this->messageContentBuilderCollection = $messageContentBuilderCollection;
+        $this->dynamicSegmentQueryBuilder      = $dynamicSegmentQueryBuilder;
+        $this->ownershipMetadataProvider       = $ownershipMetadataProvider;
     }
 
     /**
      * Send communication
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $communication
+     *
      * @return \Ds\Bundle\CommunicationBundle\Manager\CommunicationManager
      */
     public function send(Communication $communication)
@@ -91,9 +102,16 @@ class CommunicationManager extends ApiEntityManager
                     ->setContent($content)
                     ->setChannel($content->getChannel())
                     ->setProfile($content->getProfile())
-                    ->setRecipient($recipient)
-                    ->setTitle($content->getTitle())
-                    ->setPresentation($content->getPresentation());
+                    ->setRecipient($recipient);
+
+                $contentTemplate = new ContentTemplate($content->getTitle(), $content->getPresentation());
+
+
+                $contentTemplate = $this->messageContentBuilderCollection->processAll($message, $recipient, $contentTemplate);
+
+                $message
+                    ->setPresentation($contentTemplate->getContent())
+                    ->setTitle($contentTemplate->getSubject());
 
                 $message = $this->messageManager->send($message, $recipient, $content->getProfile());
 
@@ -108,8 +126,9 @@ class CommunicationManager extends ApiEntityManager
     /**
      * Get users
      *
-     * @param array $criteria
+     * @param array                                         $criteria
      * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
+     *
      * @return QueryBuilder
      */
     public function getCriteriaQueryBuilder(Communication $communication)
@@ -127,7 +146,7 @@ class CommunicationManager extends ApiEntityManager
             $alias = current($qb->getDQLPart('from'))->getAlias();
 
             $qb->resetDQLPart('select');
-            $qb->addSelect($alias );
+            $qb->addSelect($alias);
 
             $organizationField = $this->ownershipMetadataProvider
                 ->getMetadata($segment->getEntity())
@@ -156,13 +175,14 @@ class CommunicationManager extends ApiEntityManager
     /**
      * Get users
      *
-     * @param array $criteria
+     * @param array                                         $criteria
      * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
+     *
      * @return array
      */
-    public function getUsers(Communication $communication, Channel $channel = null, $extraFields = [])
+    public function getUsers(Communication $communication, Channel $channel = null)
     {
-        $qb= $this->getCriteriaQueryBuilder($communication , $extraFields);
+        $qb = $this->getCriteriaQueryBuilder($communication);
 
         // @todo check for $channel
 

@@ -82,6 +82,6 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
             $this->entityManager->persist($message);
         }
 
-
+        return true;
     }
 }

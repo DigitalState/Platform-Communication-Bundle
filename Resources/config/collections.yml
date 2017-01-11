@@ -3,4 +3,7 @@ services:
         class: Ds\Bundle\CommunicationBundle\Collection\ChannelCollection
 
     ds.communication.collection.message_event_handler:
-        class: Ds\Bundle\CommunicationBundle\Collection\MessageEventHandlerCollection
+            class: Ds\Bundle\CommunicationBundle\Collection\MessageEventHandlerCollection
+
+    ds.communication.collection.message_content_builder:
+        class: Ds\Bundle\CommunicationBundle\Collection\MessageContentBuilderCollection

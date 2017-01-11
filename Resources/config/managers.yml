@@ -14,6 +14,7 @@ services:
             - @doctrine.orm.entity_manager
             - @oro_user.manager
             - @ds.communication.manager.message
+            - @ds.communication.collection.message_content_builder
             - @oro_segment.query.dynamic_segment.query_builder
             - @oro_security.owner.ownership_metadata_provider
 
