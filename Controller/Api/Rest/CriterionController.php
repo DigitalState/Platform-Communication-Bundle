@@ -2,7 +2,7 @@
 
 namespace Ds\Bundle\CommunicationBundle\Controller\Api\Rest;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Ds\Bundle\ApiBundle\Controller\Api\Rest\AbstractController;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -17,7 +17,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
  * @Route("/communication")
  * @NamePrefix("ds_communication_api_rest_")
  */
-class CriterionController extends RestController
+class CriterionController extends AbstractController
 {
     /**
      * Get collection action
@@ -106,5 +106,20 @@ class CriterionController extends RestController
     public function getManager()
     {
         return $this->get('ds.communication.manager.criterion');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function transformEntityField($field, &$value)
+    {
+        switch ($field) {
+            case 'communication':
+                $value = $this->transformEntityToId($value);
+                break;
+
+            default:
+                parent::transformEntityField($field, $value);
+        }
     }
 }

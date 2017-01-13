@@ -2,7 +2,7 @@
 
 namespace Ds\Bundle\CommunicationBundle\Controller\Api\Rest;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Ds\Bundle\ApiBundle\Controller\Api\Rest\AbstractController;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -15,7 +15,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
  * @RouteResource("communication")
  * @NamePrefix("ds_communication_api_rest_")
  */
-class CommunicationController extends RestController
+class CommunicationController extends AbstractController
 {
     /**
      * Get collection action
@@ -104,5 +104,21 @@ class CommunicationController extends RestController
     public function getManager()
     {
         return $this->get('ds.communication.manager.communication');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function transformEntityField($field, &$value)
+    {
+        switch ($field) {
+            case 'contents':
+            case 'criteria':
+                $value = $this->transformEntitiesToIds($value);
+                break;
+
+            default:
+                parent::transformEntityField($field, $value);
+        }
     }
 }
