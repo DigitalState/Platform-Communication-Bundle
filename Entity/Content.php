@@ -4,6 +4,7 @@ namespace Ds\Bundle\CommunicationBundle\Entity;
 
 use Ds\Bundle\EntityBundle\Entity\Attribute;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
 use Ds\Bundle\TransportBundle\Entity\Profile;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -63,6 +64,8 @@ class Content
     use Attribute\Presentation;
 
     use Ownership\BusinessUnitAwareTrait;
+
+    use FallbackTrait;
 
     /**
      * @var \Ds\Bundle\CommunicationBundle\Entity\Communication

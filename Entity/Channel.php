@@ -4,6 +4,7 @@ namespace Ds\Bundle\CommunicationBundle\Entity;
 
 use Ds\Bundle\EntityBundle\Entity\Attribute;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -65,6 +66,8 @@ class Channel
     use Attribute\Implementation;
 
     use Ownership\BusinessUnitAwareTrait;
+
+    use FallbackTrait;
 
     /**
      * @var \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue[]
