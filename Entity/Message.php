@@ -51,7 +51,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      }
  * )
  * @ORM\Entity(repositoryClass="Ds\Bundle\CommunicationBundle\Repository\MessageRepository")
- * @ORM\Table(name="ds_comm_message")
+ * @ORM\Table(name="ds_comm_message", indexes={
+ *     @ORM\Index(name="IDX_5F3E5701A745698", columns={"recipient_entity_name","recipient_entity_id"}),
+ *     @ORM\Index(name="IDX_701A74ADD04A420", columns={"message_uid"})
+ *      }
+ * )
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\HasLifecycleCallbacks()
