@@ -34,32 +34,30 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
     }
 
     /**
+     * Check if the transition to the new delivery status is possible.
+     *
      * @param $oldStatus
      * @param $newStatus
      *
      * @return mixed
      */
-    private static function getStatus($oldStatus, $newEventType)
+    private static function isTransitionPossible($oldStatus, $newEventType)
     {
-        // @todo replace by a Oro Workflow
+
+        $status = [
+            Message::STATUS_UNKNOWN => 0,
+            Message::STATUS_QUEUED  => 10,
+            Message::STATUS_SENDING => 15,
+            Message::STATUS_SENT    => 20,
+
+            Message::STATUS_CANCELLED => 100,
+            Message::STATUS_OPEN      => 100,
+            Message::STATUS_FAILED    => 100,
+        ];
+
         $newEventType = strtolower($newEventType);
-        // final message states
-        if ($oldStatus === Message::STATUS_FAILED
-            || $oldStatus === Message::STATUS_SENT
-            || $oldStatus === Message::STATUS_CANCELLED
-        )
-        {
-            return $oldStatus;
-        }
 
-        if ($newEventType !== Message::STATUS_UNKNOWN)
-        {
-            // Message:: STATUS_QUEUED
-            // Message::STATUS_SENDING
-            return $newEventType;
-        }
-
-        return $oldStatus;
+        return $status[$oldStatus] < $status[$newEventType];
     }
 
 
@@ -67,6 +65,7 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
     {
         $eventType = $event->getEventType();
         $message   = $event->getMessage();
+
         if (in_array($eventType, [
             Message::STATUS_UNKNOWN,
             Message::STATUS_QUEUED,
@@ -77,7 +76,12 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
             Message::STATUS_FAILED,
         ]))
         {
-            $message->setDeliveryStatus(self::getStatus($message->getDeliveryStatus(), $eventType));
+
+            // We might receive events in a different order that they occured, avoid setting the status to a previous state
+            if (self::isTransitionPossible($message->getDeliveryStatus(), $eventType))
+            {
+                $message->setDeliveryStatus($eventType);
+            }
 
             $this->entityManager->persist($message);
         }
