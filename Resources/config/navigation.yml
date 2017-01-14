@@ -23,10 +23,12 @@ oro_menu_config:
     tree:
         application_menu:
             children:
+                ds_communication_tab:
+                   children:
+                      ds_communication_index: ~
                 system_tab:
                     children:
                         ds_communication_tab:
                             children:
-                                ds_communication_index: ~
                                 ds_channel_index: ~
                                 ds_template_index: ~
