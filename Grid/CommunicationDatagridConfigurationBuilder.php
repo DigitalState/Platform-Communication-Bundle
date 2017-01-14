@@ -41,42 +41,36 @@ class CommunicationDatagridConfigurationBuilder extends BaseReportConfigurationB
         $configuration->offsetSetByPath('[source][acl_resource]', 'oro_communication_view');
         $configuration->offsetSetByPath(ExportExtension::EXPORT_OPTION_PATH, true);
 
-
         if ( !$metadata || empty($metadata->routeView))
         {
             return $configuration;
         }
 
+        $viewAction = [
+            'view' => [
+                'type'         => 'dialog',
+                //'type'         => 'navigate',
+                'label'        => 'oro.report.datagrid.row.action.view',
+                'acl_resource' => 'VIEW;entity:' . $className,
+                'icon'         => 'eye-open',
+                'link'         => 'preview_link',
+                'rowAction'    => true,
+            ],
+        ];
 
-        if(0) // @todo add preview link
-        {
-            $viewAction = [
-                'view' => [
-                    'type'         => 'dialog',
-                    //'type'         => 'navigate',
-                    'label'        => 'oro.report.datagrid.row.action.view',
-                    'acl_resource' => 'VIEW;entity:' . $className,
-                    'icon'         => 'eye-open',
-                    'link'         => 'preview_link',
-                    'rowAction'    => true,
+        $properties = [
+            $primaryKey     => null,
+            'preview_link'  => [
+                'type'   => 'url',
+                'route'  => 'ds_communication_widget_preview_content',
+                'params' => [
+                    'id'            => $primaryKey,
                 ],
-            ];
+            ],
+        ];
 
-            $properties = [
-                $primaryKey    => null,
-                'preview_link' => [
-                    'type'   => 'url',
-                    'route'  => 'ds_communication_widget_preview_content',
-                    'params' => [
-                        'communication' => $primaryKey,
-                        'recipient'     => 123,
-                    ],
-                ],
-            ];
-
-            $configuration->offsetAddToArrayByPath('[properties]', $properties);
-            $configuration->offsetAddToArrayByPath('[actions]', $viewAction);
-        }
+        $configuration->offsetAddToArrayByPath('[properties]', $properties);
+        $configuration->offsetAddToArrayByPath('[actions]', $viewAction);
 
         return $configuration;
     }

@@ -77,6 +77,38 @@ class CommunicationManager extends ApiEntityManager
     }
 
     /**
+     * @param Communication $communication
+     * @param Content       $content
+     * @param               $recipient
+     *
+     * @return Message
+     */
+    public function compileMessage(Communication $communication, Content $content, $recipient)
+    {
+        /** @var Message $message */
+        $message = $this->messageManager->createEntity();
+
+        $message
+            ->setCommunication($communication)
+            ->setContent($content)
+            ->setChannel($content->getChannel())
+            ->setProfile($content->getProfile())
+            ->setRecipientFullName(trim(sprintf("%s %s" , $recipient->getFirstName() , $recipient->getLastName())))
+            ->setRecipient($recipient);
+
+        $contentTemplate = new ContentTemplate($content->getTitle(), $content->getPresentation());
+
+
+        $contentTemplate = $this->messageContentBuilderCollection->processAll($message, $recipient, $contentTemplate);
+
+        $message
+            ->setPresentation($contentTemplate->getContent())
+            ->setTitle($contentTemplate->getSubject());
+
+        return $message;
+    }
+
+    /**
      * Send communication
      *
      * @param \Ds\Bundle\CommunicationBundle\Entity\Communication $communication
@@ -88,30 +120,14 @@ class CommunicationManager extends ApiEntityManager
         $contents = $communication->getContents();
 
         /** @var Content $content */
-        foreach ($contents as $content) {
+        foreach ($contents as $content)
+        {
 
             $recipients = $this->getUsers($communication, $content->getChannel());
 
-            foreach ($recipients as $recipient) {
-
-                /** @var Message $message */
-                $message = $this->messageManager->createEntity();
-
-                $message
-                    ->setCommunication($communication)
-                    ->setContent($content)
-                    ->setChannel($content->getChannel())
-                    ->setProfile($content->getProfile())
-                    ->setRecipient($recipient);
-
-                $contentTemplate = new ContentTemplate($content->getTitle(), $content->getPresentation());
-
-
-                $contentTemplate = $this->messageContentBuilderCollection->processAll($message, $recipient, $contentTemplate);
-
-                $message
-                    ->setPresentation($contentTemplate->getContent())
-                    ->setTitle($contentTemplate->getSubject());
+            foreach ($recipients as $recipient)
+            {
+                $message = $this->compileMessage($communication, $content, $recipient);
 
                 $message = $this->messageManager->send($message, $recipient, $content->getProfile());
 

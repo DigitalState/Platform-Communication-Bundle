@@ -289,25 +289,26 @@ datagrid:
                     type: datetime
                     data_name: c.updatedAt
         actions:
-            view:
-                type: navigate
-                label: ds.communication.content.grid.actions.view
-                link: view_link
-                icon: eye-open
-                acl_resource: ds.communication.content.view
-                rowAction: true
-            update:
-                type: navigate
-                label: ds.communication.content.grid.actions.update
-                link: update_link
-                icon: edit
-                acl_resource: ds.communication.content.edit
-            delete:
-                type: delete
-                label: ds.communication.content.grid.actions.delete
-                link: delete_link
-                icon: trash
-                acl_resource: ds.communication.content.delete
+# @todo re-enable later, currently edditing a single content is not working, use Communication->Edit ...
+#            view:
+#                type: navigate
+#                label: ds.communication.content.grid.actions.view
+#                link: view_link
+#                icon: eye-open
+#                acl_resource: ds.communication.content.view
+#                rowAction: true
+#            update:
+#                type: navigate
+#                label: ds.communication.content.grid.actions.update
+#                link: update_link
+#                icon: edit
+#                acl_resource: ds.communication.content.edit
+#            delete:
+#                type: delete
+#                label: ds.communication.content.grid.actions.delete
+#                link: delete_link
+#                icon: trash
+#                acl_resource: ds.communication.content.delete
 
     ds-communication-message:
         extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Message
