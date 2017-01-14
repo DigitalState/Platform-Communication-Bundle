@@ -42,6 +42,8 @@ ds:
                 view: View
                 update: Edit
                 delete: Delete
+                preview_message: Preview message
+                view_user: Go to user
         button:
             create: Create Communication
             send: Send

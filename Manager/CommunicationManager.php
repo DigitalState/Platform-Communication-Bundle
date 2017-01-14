@@ -8,6 +8,7 @@ use Ds\Bundle\CommunicationBundle\Collection\MessageContentBuilderCollection;
 use Ds\Bundle\CommunicationBundle\Entity\Content;
 use Ds\Bundle\CommunicationBundle\Entity\Message;
 use Ds\Bundle\CommunicationBundle\Model\ContentTemplate;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
@@ -77,9 +78,9 @@ class CommunicationManager extends ApiEntityManager
     }
 
     /**
-     * @param Communication $communication
-     * @param Content       $content
-     * @param               $recipient
+     * @param Communication                                             $communication
+     * @param Content                                                   $content
+     * @param FirstNameInterface|LastNameInterface|EmailHolderInterface $recipient
      *
      * @return Message
      */
@@ -93,7 +94,7 @@ class CommunicationManager extends ApiEntityManager
             ->setContent($content)
             ->setChannel($content->getChannel())
             ->setProfile($content->getProfile())
-            ->setRecipientFullName(trim(sprintf("%s %s" , $recipient->getFirstName() , $recipient->getLastName())))
+            ->setRecipientFullName(trim(sprintf("%s %s", $recipient->getFirstName(), $recipient->getLastName())))
             ->setRecipient($recipient);
 
         $contentTemplate = new ContentTemplate($content->getTitle(), $content->getPresentation());

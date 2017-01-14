@@ -47,24 +47,36 @@ class CommunicationDatagridConfigurationBuilder extends BaseReportConfigurationB
         }
 
         $viewAction = [
-            'view' => [
+            'preview' => [
                 'type'         => 'dialog',
                 //'type'         => 'navigate',
-                'label'        => 'oro.report.datagrid.row.action.view',
+                'label'        => 'ds.communication.grid.actions.preview_message',
                 'acl_resource' => 'VIEW;entity:' . $className,
                 'icon'         => 'eye-open',
                 'link'         => 'preview_link',
                 'rowAction'    => true,
             ],
+            'view'    => [
+                'type'         => 'navigate',
+                'label'        => 'ds.communication.grid.actions.view_user',
+                'acl_resource' => 'VIEW;entity:' . $className,
+                'icon'         => 'user',
+                'link'         => 'view_link',
+            ],
         ];
 
         $properties = [
-            $primaryKey     => null,
-            'preview_link'  => [
+            $primaryKey => null,
+            'view_link'    => [
+                'type'   => 'url',
+                'route'  => $metadata->routeView,
+                'params' => [ $primaryKey ],
+            ],
+            'preview_link' => [
                 'type'   => 'url',
                 'route'  => 'ds_communication_widget_preview_content',
                 'params' => [
-                    'id'            => $primaryKey,
+                    'id' => $primaryKey,
                 ],
             ],
         ];
