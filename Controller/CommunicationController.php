@@ -67,7 +67,7 @@ class CommunicationController extends BreadController
             $entity->setUsers($users);
         }
 
-        $statuses_cnt = $this->getDoctrine()->getRepository('DsCommunicationBundle:Communication')->getCommunicationStatus($entity);
+        $statuses_cnt = $this->getDoctrine()->getRepository('DsCommunicationBundle:Message')->getCommunicationStatus($entity);
 
         $config = $this->getConfig('entity', $entity);
 
