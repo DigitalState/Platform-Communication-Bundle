@@ -54,7 +54,6 @@ class ProcessWebHookCommand extends ContainerAwareCommand implements CronCommand
 
         $messageEventServices = $this->getContainer()->get('ds.communication.collection.message_event_handler');
 
-
         // @todo use itterable results
         $results = $em->getRepository('DsTransportBundle:WebHookData')
             ->findBy([
@@ -68,29 +67,38 @@ class ProcessWebHookCommand extends ContainerAwareCommand implements CronCommand
 
             $hookHandler = $transportManager->getHandler($profile);
 
-            $message_uid = $hookHandler->getMessageUID($webHookData);
-
-            /** @var AbstractMessageEvent $event */
-            $event = $hookHandler->createEvent($webHookData);
-
-            if ($event)
+            try
             {
-                $webHookData->setProcessed(true);
+                $message_uid = $hookHandler->getMessageUID($webHookData);
 
-                /** @var \Ds\Bundle\CommunicationBundle\Entity\Message $message */
-                $message = $em
-                    ->getRepository('DsCommunicationBundle:Message')
-                    ->findOneBy([
-                                    'message_uid' => $message_uid,
-                                    'profile'     => $profile->getId(),
-                                ]);
+                $logger->info(sprintf("Processing transport '%s' - '%s' #%d: UID=%s   ", $profile->getTransport()->getTitle(), $profile->getTitle() , $webHookData->getId() , $message_uid));
+                /** @var AbstractMessageEvent $event */
+                $event = $hookHandler->createEvent($webHookData);
 
-                if ($message)
+                if ($event)
                 {
-                    $event->setMessage($message);
-                }
+                    $webHookData->setProcessed(true);
 
-                $messageEventServices->dispatch($event);
+                    /** @var \Ds\Bundle\CommunicationBundle\Entity\Message $message */
+                    $message = $em
+                        ->getRepository('DsCommunicationBundle:Message')
+                        ->findOneBy([
+                                        'message_uid' => $message_uid,
+                                        'profile'     => $profile->getId(),
+                                    ]);
+
+                    if ($message)
+                    {
+                        $event->setMessage($message);
+                    }
+
+                    $messageEventServices->dispatch($event);
+                }
+            }
+            catch(\Exception $exception)
+            {
+                // @todo
+                $logger->error(sprintf("Error in webhook data %d :%s", $webHookData->getId() , $exception->getMessage()));
             }
 
             $em->persist($webHookData);

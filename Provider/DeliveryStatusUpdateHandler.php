@@ -67,6 +67,9 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
         $eventType = $event->getEventType();
         $message   = $event->getMessage();
 
+        if(!$message)
+            return;
+
         if (in_array($eventType, [
             Message::STATUS_UNKNOWN,
             Message::STATUS_QUEUED,
@@ -88,6 +91,5 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
             $this->entityManager->persist($message);
         }
 
-        return true;
     }
 }

@@ -15,10 +15,10 @@ class MessageEventHandlerCollection extends ArrayCollection
 
     public function dispatch(AbstractMessageEvent $event)
     {
-        $this->forAll(function ($i,$provider) use ($event)
+        /** @var MessageEventHandlerInterface $provider */
+        foreach ($this as $provider)
         {
-            /** @var MessageEventHandlerInterface $provider */
             $provider->handle($event);
-        });
+        };
     }
 }
