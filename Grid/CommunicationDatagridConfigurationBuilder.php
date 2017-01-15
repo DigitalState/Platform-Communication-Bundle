@@ -48,13 +48,26 @@ class CommunicationDatagridConfigurationBuilder extends BaseReportConfigurationB
 
         $viewAction = [
             'preview' => [
-                'type'         => 'dialog',
+                'type'          => 'dialog',
                 //'type'         => 'navigate',
-                'label'        => 'ds.communication.grid.actions.preview_message',
-                'acl_resource' => 'VIEW;entity:' . $className,
-                'icon'         => 'eye-open',
-                'link'         => 'preview_link',
-                'rowAction'    => true,
+                'label'         => 'ds.communication.grid.actions.preview_message',
+                'acl_resource'  => 'VIEW;entity:' . $className,
+                'icon'          => 'eye-open',
+                'link'          => 'preview_link',
+                'rowAction'     => true,
+                'widgetOptions' => [
+                    'options' => [
+                        'dialogOptions' => [
+                            'title'                     => 'Email', //@todo i18n
+                            'allowMaximize'             => true,
+                            'allowMinimize'             => false,
+                            'modal'                     => false,
+                            'dblclick'                  => 'maximize',
+                            'maximizedHeightDecreaseBy' => 'minimize - bar',
+                            'width'                     => 700,
+                        ],
+                    ],
+                ],
             ],
             'view'    => [
                 'type'         => 'navigate',
@@ -66,7 +79,7 @@ class CommunicationDatagridConfigurationBuilder extends BaseReportConfigurationB
         ];
 
         $properties = [
-            $primaryKey => null,
+            $primaryKey    => null,
             'view_link'    => [
                 'type'   => 'url',
                 'route'  => $metadata->routeView,
