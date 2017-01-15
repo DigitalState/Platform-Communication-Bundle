@@ -282,7 +282,7 @@ class Message
     /**
      * @return string
      */
-    public function getRecipientFullName(): string
+    public function getRecipientFullName()
     {
         return $this->recipientFullName;
     }
@@ -292,7 +292,7 @@ class Message
      *
      * @return Message
      */
-    public function setRecipientFullName(string $recipientFullName): Message
+    public function setRecipientFullName($recipientFullName)
     {
         $this->recipientFullName = $recipientFullName;
 

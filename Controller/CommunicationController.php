@@ -7,6 +7,9 @@ use Ds\Bundle\AdminBundle\Controller\BreadController;
 use Ds\Bundle\CommunicationBundle\Entity\Communication;
 
 use Ds\Bundle\TransportBundle\Entity\Profile;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -123,7 +126,7 @@ class CommunicationController extends BreadController
     public function sendAction(Communication $entity)
     {
         $manager = $this->get('ds.communication.manager.communication');
-        $manager->send($entity);
+        $manager->queueSend($entity);
 
         $this->addFlash('success', 'ds.communication.action.sent', true);
         $meta = $this->getMetaByAlias('');
@@ -187,12 +190,17 @@ class CommunicationController extends BreadController
 
         $manager = $this->get('ds.communication.manager.communication');
 
+        /** @var FirstNameInterface|LastNameInterface|EmailHolderInterface $recipient */
         $recipient = $this->getDoctrine()->getRepository($communication->getEntityName())->find($id);
 
         $mesasges = [];
         foreach ($communication->getContents() as $content)
         {
-            $mesasges[] = $manager->compileMessage($communication, $content, $recipient);
+            $message = $manager->createMessage($communication, $content, $recipient);
+
+            $message = $manager->compileMessage($message);
+
+            $mesasges[] = $message;
         }
 
         return [

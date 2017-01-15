@@ -46,7 +46,8 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
 
         $status = [
             Message::STATUS_UNKNOWN => 0,
-            Message::STATUS_QUEUED  => 10,
+            Message::STATUS_QUEUED  => 5,
+            Message::STATUS_PROCESSING => 10,
             Message::STATUS_SENDING => 15,
             Message::STATUS_SENT    => 20,
 
@@ -69,6 +70,7 @@ class DeliveryStatusUpdateHandler implements MessageEventHandlerInterface
         if (in_array($eventType, [
             Message::STATUS_UNKNOWN,
             Message::STATUS_QUEUED,
+            Message::STATUS_PROCESSING,
             Message::STATUS_SENDING,
             Message::STATUS_OPEN,
             Message::STATUS_SENT,

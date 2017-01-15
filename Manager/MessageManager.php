@@ -51,8 +51,10 @@ class MessageManager extends ApiEntityManager
      *
      * @return Message
      */
-    public function send(Message $message, $recipient,  Profile $profile)
+    public function send(Message $message)
     {
+        $profile = $message->getProfile();
+        $recipient = $this->om->getRepository($message->getRecipientEntityName())->find($message->getRecipientEntityId());
 
         /** @var Channel $channel */
         $channel = $this->channelCollection->filter(function($item) use ($message) {
@@ -69,12 +71,12 @@ class MessageManager extends ApiEntityManager
         $channel->setTransport($transport);
 
 
-        if($channel->canSendTo($recipient))
+        if(!$channel->canSendTo($recipient))
         {
-            $message = $channel->send($message, $recipient);
+            $message->setDeliveryStatus(\Ds\Bundle\TransportBundle\Model\Message::STATUS_CANCELLED);
+            return $message;
         }
 
-
-        return $message;
+        return $channel->send($message, $recipient);
     }
 }

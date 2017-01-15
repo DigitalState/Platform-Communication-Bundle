@@ -1,6 +1,6 @@
 <?php
 
-namespace Ds\Bundle\CommunicationBundle\Tests\Unit\DependencyInjection;
+namespace Ds\Bundle\CommunicationBundle\Tests\Unit\Provider;
 
 use Ds\Bundle\CommunicationBundle\Entity\Message;
 use Ds\Bundle\CommunicationBundle\Provider\DeliveryStatusUpdateHandler;
@@ -54,8 +54,11 @@ class DeliveryStatusUpdateHandlerTest extends PHPUnit_Framework_TestCase
 
     function statusProvider()
     {
-        //        const STATUS_UNKNOWN = 'unknown';
+        //        const STATUS_UNKNOWN = '';
         //        const STATUS_QUEUED = 'queued';
+        //        const STATUS_PROCESSING = 'processing';
+        //        const STATUS_QUEUED = 'queued';
+
         //        const STATUS_SENDING = 'sending';
         //        const STATUS_SENT = 'sent';
         //        const STATUS_CANCELLED = 'cancelled';
@@ -66,6 +69,10 @@ class DeliveryStatusUpdateHandlerTest extends PHPUnit_Framework_TestCase
             [ 'queued', 'sent', 'sent' ],
             [ 'queued', 'failed', 'failed' ],
 
+            [ 'processing', 'failed', 'failed' ],
+            [ 'processing', 'sent', 'sent' ],
+            [ 'processing', 'failed', 'failed' ],
+            [ 'processing', 'queued', 'processing' ],
 
             [ 'sending', 'sent', 'sent' ],
             [ 'sending', 'failed', 'failed' ],

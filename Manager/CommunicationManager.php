@@ -8,6 +8,7 @@ use Ds\Bundle\CommunicationBundle\Collection\MessageContentBuilderCollection;
 use Ds\Bundle\CommunicationBundle\Entity\Content;
 use Ds\Bundle\CommunicationBundle\Entity\Message;
 use Ds\Bundle\CommunicationBundle\Model\ContentTemplate;
+use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Email;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -77,6 +78,7 @@ class CommunicationManager extends ApiEntityManager
         $this->ownershipMetadataProvider       = $ownershipMetadataProvider;
     }
 
+
     /**
      * @param Communication                                             $communication
      * @param Content                                                   $content
@@ -84,11 +86,39 @@ class CommunicationManager extends ApiEntityManager
      *
      * @return Message
      */
-    public function compileMessage(Communication $communication, Content $content, $recipient)
+    public function compileMessage(Message $message)
+    {
+        $contentTemplate = new ContentTemplate($message->getContent()->getTitle(), $message->getContent()->getPresentation());
+
+        $recipient = $this->om->getRepository($message->getRecipientEntityName())->find($message->getRecipientEntityId());
+
+        if ( !$recipient)
+            return null;
+
+        $contentTemplate = $this->messageContentBuilderCollection->processAll($message, $recipient, $contentTemplate);
+
+        $message
+            ->setPresentation($contentTemplate->getContent())
+            ->setTitle($contentTemplate->getSubject());
+
+        return $message;
+    }
+
+
+
+    /**
+     * @param Communication                              $communication
+     * @param Content                                    $content
+     * @param FirstNameInterface|LastNameInterface|Email $recipient
+     *
+     * @return Message
+     */
+    public function createMessage(Communication $communication, Content $content, $recipient)
     {
         /** @var Message $message */
         $message = $this->messageManager->createEntity();
 
+        // @todo add a UNIQUE key on [communication, content, recipient]
         $message
             ->setCommunication($communication)
             ->setContent($content)
@@ -96,15 +126,6 @@ class CommunicationManager extends ApiEntityManager
             ->setProfile($content->getProfile())
             ->setRecipientFullName(trim(sprintf("%s %s", $recipient->getFirstName(), $recipient->getLastName())))
             ->setRecipient($recipient);
-
-        $contentTemplate = new ContentTemplate($content->getTitle(), $content->getPresentation());
-
-
-        $contentTemplate = $this->messageContentBuilderCollection->processAll($message, $recipient, $contentTemplate);
-
-        $message
-            ->setPresentation($contentTemplate->getContent())
-            ->setTitle($contentTemplate->getSubject());
 
         return $message;
     }
@@ -116,26 +137,25 @@ class CommunicationManager extends ApiEntityManager
      *
      * @return \Ds\Bundle\CommunicationBundle\Manager\CommunicationManager
      */
-    public function send(Communication $communication)
+    public function queueSend(Communication $communication)
     {
         $contents = $communication->getContents();
 
         /** @var Content $content */
         foreach ($contents as $content)
         {
-
             $recipients = $this->getUsers($communication, $content->getChannel());
 
             foreach ($recipients as $recipient)
             {
-                $message = $this->compileMessage($communication, $content, $recipient);
+                $message = $this->createMessage($communication, $content, $recipient);
 
-                $message = $this->messageManager->send($message, $recipient, $content->getProfile());
+                $message->setDeliveryStatus(\Ds\Bundle\TransportBundle\Model\Message::STATUS_QUEUED);;
 
                 $this->om->persist($message);
-                $this->om->flush();
             }
         }
+        $this->om->flush();
 
         return $this;
     }

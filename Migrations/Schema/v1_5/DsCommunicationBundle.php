@@ -1,6 +1,6 @@
 <?php
 
-namespace Ds\Bundle\CommunicationBundle\Migrations\Schema\v1_4;
+namespace Ds\Bundle\CommunicationBundle\Migrations\Schema\v1_5;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Doctrine\DBAL\Schema\Schema;
@@ -20,7 +20,5 @@ class DsCommunicationBundle implements Migration
 
         $table->changeColumn('title', ['length' => 255, 'notnull' => false]);
 
-        $table->addColumn('message_uid', 'string', ['length' => 255]);
-        $table->addIndex(['message_uid'] , 'IDX_701A74ADD04A420');
     }
 }
