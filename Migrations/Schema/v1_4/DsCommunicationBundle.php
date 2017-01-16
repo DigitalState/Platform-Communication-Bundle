@@ -19,8 +19,6 @@ class DsCommunicationBundle implements Migration
         $table = $schema->getTable('ds_comm_message');
 
         $table->changeColumn('title', ['length' => 255, 'notnull' => false]);
-
-        $table->addColumn('message_uid', 'string', ['length' => 255]);
         $table->addIndex(['message_uid'] , 'IDX_701A74ADD04A420');
     }
 }
