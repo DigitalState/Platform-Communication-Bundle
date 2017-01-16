@@ -22,6 +22,8 @@ use Symfony\Component\Stopwatch\Stopwatch;
 class ProcessSendingQueueCommand extends ContainerAwareCommand implements CronCommandInterface
 {
 
+    const STATUS_SUCCESS = 0;
+
     const COMMAND_NAME = 'oro:cron:ds:communication:sending-queue:process';
 
     const LIMIT_PER_BATCH = 1000;
@@ -100,6 +102,12 @@ class ProcessSendingQueueCommand extends ContainerAwareCommand implements CronCo
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $logger = new OutputLogger($output);
+        if ($this->getContainer()->get('oro_cron.job_manager')->getRunningJobsCount(self::COMMAND_NAME) > 1)
+        {
+            $logger->warning('Parsing job already running. Terminating current job.');
+
+            return self::STATUS_SUCCESS;
+        }
 
         $this->output         = $output;
         $this->commManager    = $this->getContainer()->get('ds.communication.manager.communication');
@@ -113,7 +121,6 @@ class ProcessSendingQueueCommand extends ContainerAwareCommand implements CronCo
             ->setParameter(':deliveryStatus', \Ds\Bundle\TransportBundle\Model\Message::STATUS_QUEUED)
             ->getQuery()
             ->setMaxResults(self::LIMIT_PER_BATCH)
-
             ->iterate();
 
         $output->writeln('Processing sending queue...');

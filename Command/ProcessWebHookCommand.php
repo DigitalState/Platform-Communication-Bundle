@@ -15,6 +15,7 @@ use Oro\Component\Log\OutputLogger;
 
 class ProcessWebHookCommand extends ContainerAwareCommand implements CronCommandInterface
 {
+    const STATUS_SUCCESS = 0;
 
     const COMMAND_NAME = 'oro:cron:ds:communication:webhook:process';
 
@@ -45,6 +46,11 @@ class ProcessWebHookCommand extends ContainerAwareCommand implements CronCommand
     {
         $logger = new OutputLogger($output);
 
+        if ($this->getContainer()->get('oro_cron.job_manager')->getRunningJobsCount(self::COMMAND_NAME) > 1) {
+            $logger->warning('Parsing job already running. Terminating current job.');
+
+            return self::STATUS_SUCCESS;
+        }
 
         $transportManager = $this->getContainer()
             ->get('ds.transport.manager.webhook')
