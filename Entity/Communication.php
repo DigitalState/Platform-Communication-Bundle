@@ -4,6 +4,7 @@ namespace Ds\Bundle\CommunicationBundle\Entity;
 
 use Ds\Bundle\EntityBundle\Entity\Attribute;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -68,6 +69,7 @@ class Communication
 
     use Ownership\BusinessUnitAwareTrait;
 
+    use FallbackTrait;
 
     protected $users = []; #region @todo use service in template for datagrid
     /**

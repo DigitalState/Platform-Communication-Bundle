@@ -13,14 +13,14 @@
     ],
     "require": {
         "php": ">=5.6",
-        "digitalstate/platform-admin-bundle" : "dev-master",
-        "digitalstate/platform-data-bundle" : "dev-master",
-        "digitalstate/platform-entity-bundle" : "dev-master",
-        "digitalstate/platform-user-bundle" : "dev-master",
-        "digitalstate/platform-user-persona-bundle" : "dev-master",
-        "digitalstate/platform-transport-bundle" : "dev-master",
-        "digitalstate/platform-security-bundle" : "dev-master",
-        "digitalstate/platform-widget-bundle" : "dev-master"
+        "oro/platform": "1.10.*",
+        "digitalstate/platform-admin-bundle" : "~0.1.0",
+        "digitalstate/platform-data-bundle" : "~0.1.0",
+        "digitalstate/platform-entity-bundle" : "~0.1.0",
+        "digitalstate/platform-user-bundle" : "~0.1.0",
+        "digitalstate/platform-user-persona-bundle" : "~0.1.0",
+        "digitalstate/platform-transport-bundle" : "~0.1.0",
+        "digitalstate/platform-widget-bundle" : "~0.1.0"
     },
     "autoload": {
         "psr-4": { "Ds\\Bundle\\CommunicationBundle\\": "" }
