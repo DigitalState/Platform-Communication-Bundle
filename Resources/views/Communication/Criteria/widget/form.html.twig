@@ -4,6 +4,16 @@
 
 
 
+{% if form.entityName.vars.value is empty %}
+{# @todo ensure the Entity selector update the Query filter in the correct state #}
+<div class="container-fluid accordion" data-bound-component="oroactivitylist/js/app/components/activity-list-component">
+    <div class="items list-box list-shaped"></div>
+    <div class="no-data">
+        <span>Save the Communication and reload this page to select the criterias</span>
+    </div>
+</div>
+
+{% else %}
     {% set widgetType = 'ds_communication_communication' %}
     {% set name = 'form' %}
     {% set nameOfHiddenCriteriaDefinition = widgetType ~ '_criteria' %}
@@ -69,4 +79,7 @@
     {% for widget in ds_widgets({ position: 'ds_communication_communication_form_criteria', context: context }, { form: form }) %}
         {{ widget.content|raw }}
     {% endfor %}
+
+
+    {% endif %}
 </div>
