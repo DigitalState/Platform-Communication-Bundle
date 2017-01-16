@@ -82,14 +82,28 @@ class ConfigurationProvider implements ConfigurationProviderInterface, BuilderAw
                         "sorting" => "",
                         "func"    => null,
                     ],
-                    [
-                        "name"    => "primaryEmail",
-                        "label"   => "Primary Email",
-                        "sorting" => "",
-                        "func"    => null,
-                    ],
                 ];
+            if ($communication->getEntityName() == "Oro\\Bundle\\UserBundle\\Entity\\User")
+            {
+                $definition['columns'][] = [
+                    "name"    => "email",
+                    "label"   => "Primary Email",
+                    "sorting" => "",
+                    "func"    => null,
+                ];
+            }
+            else
+            {
+                $definition['columns'][] = [
+                    "name"    => "primaryEmail",
+                    "label"   => "Primary Email",
+                    "sorting" => "",
+                    "func"    => null,
+                ];
+            }
+
         }
+
 
         /*
         {
