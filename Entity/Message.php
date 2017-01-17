@@ -9,7 +9,6 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
-use Oro\Bundle\UserBundle\Entity\User;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Doctrine\ORM\Mapping as ORM;
