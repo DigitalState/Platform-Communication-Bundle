@@ -163,10 +163,13 @@ class CommunicationManager extends ApiEntityManager
     /**
      * Get users
      *
-     * @param array                                         $criteria
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Channel $channel
+     * @param Communication $communication
      *
      * @return QueryBuilder
+     * @throws \Exception
+     * @internal param array $criteria
+     * @internal param Channel $channel
+     *
      */
     public function getCriteriaQueryBuilder(Communication $communication)
     {

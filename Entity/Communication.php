@@ -82,6 +82,8 @@ class Communication
 
     /**
      * @param array $users
+     *
+     * @return Communication
      */
     public function setUsers($users)
     {

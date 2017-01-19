@@ -217,6 +217,8 @@ class Message
      * Sets the entity class and id
      *
      * @param object $entity
+     *
+     * @return Message
      */
     public function setRecipient(EmailHolderInterface $entity)
     {
