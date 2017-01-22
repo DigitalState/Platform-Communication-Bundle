@@ -34,11 +34,11 @@ The Communication bundle provides business users the ability to manage governmen
 
 ##### How do i add custom entities to the "Entity" droptown in the Communication and Template pages ?
 
-Simply add a `@Config` Annotation with the `contact_information` attribute. See `OroCRM\Bundle\ContactBundle\EntityContact` class for an example
+Simply add a `@Config` Annotation with the `contact_information` attribute. See `Oro\Bundle\ContactBundle\EntityContact` class for an example
 
 ```php
 
-namespace OroCRM\Bundle\ContactBundle\Entity;
+namespace Oro\Bundle\ContactBundle\Entity;
 
 /**
  * @Config(

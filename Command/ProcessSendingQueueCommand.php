@@ -152,4 +152,13 @@ class ProcessSendingQueueCommand extends ContainerAwareCommand implements CronCo
 
         return 0;
     }
+    /**
+     * Checks if the command active (i.e. properly configured etc).
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true;
+    }
 }

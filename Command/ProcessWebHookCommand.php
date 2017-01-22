@@ -116,4 +116,13 @@ class ProcessWebHookCommand extends ContainerAwareCommand implements CronCommand
 
         return 0;
     }
+    /**
+     * Checks if the command active (i.e. properly configured etc).
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true;
+    }
 }

@@ -1,0 +1,619 @@
+datagrids:
+    ds-communication-channel:
+        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Channel
+        source:
+            acl_resource: ds.communication.channel.view
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: DsCommunicationBundle:Channel, alias: c }
+        inline_editing:
+            enable: true
+        columns:
+            id:
+                label: ds.communication.channel.id.label
+            title:
+                label: ds.communication.channel.title.label
+            createdAt:
+                label: ds.communication.channel.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: ds.communication.channel.updated_at.label
+                frontend_type: datetime
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: ds_communication_channel_edit
+                params:
+                    - id
+            view_link:
+                type: url
+                route: ds_communication_channel_view
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: ds_communication_api_rest_delete_channel
+                params:
+                    - id
+        sorters:
+            columns:
+                id:
+                    data_name: c.id
+                createdAt:
+                    data_name: c.createdAt
+                updatedAt:
+                    data_name: c.updatedAt
+            default:
+                id: ASC
+        filters:
+            columns:
+                createdAt:
+                    type: datetime
+                    data_name: c.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: c.updatedAt
+        actions:
+            view:
+                type: navigate
+                label: ds.communication.channel.grid.actions.view
+                link: view_link
+                icon: eye-open
+                acl_resource: ds.communication.channel.view
+                rowAction: true
+            update:
+                type: navigate
+                label: ds.communication.channel.grid.actions.update
+                link: update_link
+                icon: edit
+                acl_resource: ds.communication.channel.edit
+            delete:
+                type: delete
+                label: ds.communication.channel.grid.actions.delete
+                link: delete_link
+                icon: trash
+                acl_resource: ds.communication.channel.delete
+    ds-communication-communication:
+        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Communication
+        source:
+            acl_resource: ds.communication.communication.view
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.title
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: DsCommunicationBundle:Communication, alias: c }
+        inline_editing:
+            enable: true
+        columns:
+            id:
+                label: ds.communication.id.label
+            title:
+                label: ds.communication.title.label
+            createdAt:
+                label: ds.communication.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: ds.communication.updated_at.label
+                frontend_type: datetime
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: ds_communication_communication_edit
+                params:
+                    - id
+            view_link:
+                type: url
+                route: ds_communication_communication_view
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: ds_communication_api_rest_delete_communication
+                params:
+                    - id
+        sorters:
+            columns:
+                id:
+                    data_name: c.id
+                title:
+                    data_name: c.title
+                createdAt:
+                    data_name: c.createdAt
+                updatedAt:
+                    data_name: c.updatedAt
+            default:
+                id: ASC
+        filters:
+            columns:
+                title:
+                    type: string
+                    data_name: c.title
+                createdAt:
+                    type: datetime
+                    data_name: c.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: c.updatedAt
+        actions:
+            view:
+                type: navigate
+                label: ds.communication.grid.actions.view
+                link: view_link
+                icon: eye-open
+                acl_resource: ds.communication.communication.view
+                rowAction: true
+            update:
+                type: navigate
+                label: ds.communication.grid.actions.update
+                link: update_link
+                icon: edit
+                acl_resource: ds.communication.communication.edit
+            delete:
+                type: delete
+                label: ds.communication.grid.actions.delete
+                link: delete_link
+                icon: trash
+                acl_resource: ds.communication.communication.delete
+    ds-communication-communication-content:
+        extends: ds-communication-content
+        options:
+            toolbarOptions:
+                hide: true
+                pagination:
+                    onePage: true
+        source:
+            query:
+                where:
+                    and:
+                        - c.communication = :communication
+            bind_parameters:
+                - communication
+        columns:
+            communication_title:
+                renderable: false
+        filters: ~
+
+    ds-communication-content:
+        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Content
+        source:
+            acl_resource: ds.communication.content.view
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.title
+#                    - c3.title as channel_title  # @todo display channel name
+                    - p.title as profile_title
+                    - c2.title as communication_title
+                    - t.title as template_title
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: DsCommunicationBundle:Content, alias: c }
+                join:
+                    left:
+                        - { join: c.communication, alias: c2 }
+                        - { join: c.channel, alias: c3 }
+                        - { join: c.profile, alias: p }
+                        - { join: c.template, alias: t }
+        inline_editing:
+            enable: true
+        columns:
+            id:
+                label: ds.communication.content.id.label
+            communication_title:
+                label: ds.communication.content.communication.title.label
+            channel_title:
+                label: ds.communication.content.channel.title.label
+            profile_title:
+                label: ds.communication.content.profile.title.label
+            title:
+                label: ds.communication.content.title.label
+            template_title:
+                label: ds.communication.content.template.title.label
+            createdAt:
+                label: ds.communication.content.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: ds.communication.content.updated_at.label
+                frontend_type: datetime
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: ds_communication_content_edit
+                params:
+                    - id
+            view_link:
+                type: url
+                route: ds_communication_content_view
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: ds_communication_api_rest_delete_content
+                params:
+                    - id
+        sorters:
+            columns:
+                id:
+                    data_name: c.id
+                communication_title:
+                    data_name: c2.title
+#                channel_title:
+#                    data_name: c3.title
+                profile_title:
+                    data_name: p.title
+                title:
+                    data_name: c.title
+                template_title:
+                    data_name: t.title
+                createdAt:
+                    data_name: c.createdAt
+                updatedAt:
+                    data_name: c.updatedAt
+            default:
+                id: ASC
+        filters:
+            columns:
+                communication_title:
+                    type: string
+                    data_name: c2.title
+#                channel_title:
+#                    type: string
+#                    data_name: c3.title
+                profile_title:
+                    type: string
+                    data_name: p.title
+                title:
+                    type: string
+                    data_name: c.title
+                template_title:
+                    type: string
+                    data_name: t.title
+                createdAt:
+                    type: datetime
+                    data_name: c.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: c.updatedAt
+        actions:
+# @todo re-enable later, currently edditing a single content is not working, use Communication->Edit ...
+#            view:
+#                type: navigate
+#                label: ds.communication.content.grid.actions.view
+#                link: view_link
+#                icon: eye-open
+#                acl_resource: ds.communication.content.view
+#                rowAction: true
+#            update:
+#                type: navigate
+#                label: ds.communication.content.grid.actions.update
+#                link: update_link
+#                icon: edit
+#                acl_resource: ds.communication.content.edit
+#            delete:
+#                type: delete
+#                label: ds.communication.content.grid.actions.delete
+#                link: delete_link
+#                icon: trash
+#                acl_resource: ds.communication.content.delete
+
+    ds-communication-message:
+        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Message
+        source:
+            acl_resource: ds.communication.message.view
+            type: orm
+            query:
+                select:
+                    - m.id
+                    - m.title
+                    - m.createdAt
+                    - m.updatedAt
+                from:
+                    - { table: DsCommunicationBundle:Message, alias: m }
+        inline_editing:
+            enable: true
+        columns:
+            id:
+                label: ds.communication.message.id.label
+            title:
+                label: ds.communication.message.title.label
+            createdAt:
+                label: ds.communication.message.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: ds.communication.message.updated_at.label
+                frontend_type: datetime
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: ds_communication_message_edit
+                params:
+                    - id
+            view_link:
+                type: url
+                route: ds_communication_message_view
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: ds_communication_api_rest_delete_message
+                params:
+                    - id
+        sorters:
+            columns:
+                id:
+                    data_name: m.id
+                title:
+                    data_name: m.title
+                createdAt:
+                    data_name: m.createdAt
+                updatedAt:
+                    data_name: m.updatedAt
+            default:
+                id: ASC
+        filters:
+            columns:
+                title:
+                    type: string
+                    data_name: m.title
+                createdAt:
+                    type: datetime
+                    data_name: m.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: m.updatedAt
+        actions:
+            view:
+                type: navigate
+                label: ds.communication.message.grid.actions.view
+                link: view_link
+                icon: eye-open
+                acl_resource: ds.communication.message.view
+                rowAction: true
+            update:
+                type: navigate
+                label: ds.communication.message.grid.actions.update
+                link: update_link
+                icon: edit
+                acl_resource: ds.communication.message.edit
+            delete:
+                type: delete
+                label: ds.communication.message.grid.actions.delete
+                link: delete_link
+                icon: trash
+                acl_resource: ds.communication.message.delete
+    ds-communication-template:
+        extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Template
+        source:
+            acl_resource: ds.communication.template.view
+            type: orm
+            query:
+                select:
+                    - t.id
+                    - t.entityName
+                    - t.title
+                    - t.createdAt
+                    - t.updatedAt
+                from:
+                    - { table: DsCommunicationBundle:Template, alias: t }
+        inline_editing:
+            enable: true
+        columns:
+            id:
+                label: ds.communication.template.id.label
+            entityName:
+                label: ds.communication.template.entityName.label
+                type:           twig
+                template:       OroEntityBundle:Datagrid:Property/entity.html.twig
+                frontend_type:  html
+                context:
+                    entity_provider: "@oro_entity.entity_provider"
+            title:
+                label: ds.communication.template.title.label
+            createdAt:
+                label: ds.communication.template.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: ds.communication.template.updated_at.label
+                frontend_type: datetime
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: ds_communication_template_edit
+                params:
+                    - id
+            view_link:
+                type: url
+                route: ds_communication_template_view
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: ds_communication_api_rest_delete_template
+                params:
+                    - id
+        sorters:
+            columns:
+                id:
+                    data_name: t.id
+                title:
+                    data_name: t.title
+                createdAt:
+                    data_name: t.createdAt
+                updatedAt:
+                    data_name: t.updatedAt
+            default:
+                id: ASC
+        filters:
+            columns:
+                entityName:
+                    type:      choice
+                    data_name: t.entityName
+                    null_value: _empty_
+                    options:
+                        field_options:
+                            multiple:       true
+                            choices:        "@oro_email.emailtemplate.datagrid_helper->getEntityNames"
+                            translatable_options: false
+                title:
+                    type: string
+                    data_name: t.title
+                createdAt:
+                    type: datetime
+                    data_name: t.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: t.updatedAt
+        actions:
+            view:
+                type: navigate
+                label: ds.communication.template.grid.actions.view
+                link: view_link
+                icon: eye-open
+                acl_resource: ds.communication.template.view
+                rowAction: true
+            update:
+                type: navigate
+                label: ds.communication.template.grid.actions.update
+                link: update_link
+                icon: edit
+                acl_resource: ds.communication.template.edit
+            delete:
+                type: delete
+                label: ds.communication.template.grid.actions.delete
+                link: delete_link
+                icon: trash
+                acl_resource: ds.communication.template.delete
+
+
+
+
+
+    ds-communication-users-items-base-mixin:
+        source:
+            query:
+                select:
+                    - __root_entity__.id
+                    - mli.contactedTimes
+                    - mli.lastContactedAt
+                join:
+                    left:
+                        -
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            alias: 'mlr'
+                            conditionType: 'WITH'
+                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
+                        -
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            alias: 'mli'
+                            conditionType: 'WITH'
+                            condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
+        columns:
+            contactedTimes:
+                label: orocrm.marketinglist.datagrid.contactedTimes
+            lastContactedAt:
+                label: orocrm.marketinglist.datagrid.lastContactedAt
+                frontend_type: datetime
+        filters:
+            columns:
+                contactedTimes:  { type: number-range,   data_name: mli.contactedTimes }
+                lastContactedAt: { type: datetime, data_name: mli.lastContactedAt }
+        sorters:
+            columns:
+                contactedTimes:  { data_name: mli.contactedTimes }
+                lastContactedAt: { data_name: mli.lastContactedAt }
+        properties:
+            marketingList: ~
+        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
+        options:
+            skip_count_walker: true
+            mixin: true
+
+
+
+    ds-communication-users-items-base-unsubscribe-mixin:
+        extends: ds-communication-users-items-base-mixin
+        source:
+            query:
+                select:
+                    - (CASE WHEN mlu.id IS NULL THEN true ELSE false END) as subscribed
+                join:
+                    left:
+                        -
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            alias: 'mlu'
+                            conditionType: 'WITH'
+                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
+        columns:
+            subscribed:
+                label: orocrm.marketinglist.datagrid.subscribed
+                frontend_type: boolean
+        filters:
+            columns:
+                subscribed: { type: boolean, data_name: subscribed }
+        sorters:
+            columns:
+                subscribed: { data_name: subscribed }
+        properties:
+            subscribe_link:
+                type: url
+                route: orocrm_api_subscribe_marketinglist_unsubscribeditem
+                params: [ marketingList, id ]
+            unsubscribe_link:
+                type: url
+                route: orocrm_api_unsubscribe_marketinglist_unsubscribeditem
+                params: [ marketingList, id ]
+        actions:
+            subscribe:
+                type:         ajax
+                label:        orocrm.marketinglist.action.subscribe
+                link:         subscribe_link
+                icon:         plus
+                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
+            unsubscribe:
+                type:         ajax
+                label:        orocrm.marketinglist.action.unsubscribe
+                link:         unsubscribe_link
+                icon:         minus
+                acl_resource: orocrm_marketinglist_unsubscribed_item_create
+
+    ds-communication-users-items-mixin:
+        extends: ds-communication-users-items-base-unsubscribe-mixin
+        source:
+            query:
+                where:
+                    and:
+                        - mlr.id IS NULL
+        properties:
+            remove_link:
+                type: url
+                route: orocrm_api_remove_marketinglist_removeditem
+                params: [ marketingList, id ]
+        actions:
+            remove:
+                type:         ajaxdelete
+                label:        orocrm.marketinglist.action.remove
+                link:         remove_link
+                icon:         remove
+                acl_resource: orocrm_marketing_list_removed_item_create
+                defaultMessages:
+                    confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
+                    confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
+                    confirm_content: orocrm.marketinglist.remove_dialog.content
+                    success:         orocrm.marketinglist.remove_dialog.success

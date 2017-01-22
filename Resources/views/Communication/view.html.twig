@@ -17,7 +17,7 @@
         path: path('ds_communication_communication_send', { id: entity.id }),
         label: 'ds.communication.button.send'|trans,
         aCss: 'btn-success',
-        iCss: 'icon-envelope-alt'
+        iCss: 'fa-envelope'
     }) }}
     {% if resource_granted('ds.communication.communication.edit', entity) %}
         {{ UI.editButton({

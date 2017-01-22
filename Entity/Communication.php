@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      routeEdit="ds_communication_communication_edit",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt",
+ *              "icon"="fa-list-alt",
  *              "type"="communication",
  *              "alias"=""
  *          },
