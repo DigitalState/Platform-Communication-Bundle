@@ -188,8 +188,9 @@ class CommunicationManager extends ApiEntityManager
             $qb->resetDQLPart('select');
             $qb->addSelect($alias);
 
+
             $organizationField = $this->ownershipMetadataProvider
-                ->getMetadata($segment->getEntity())
+                ->getMetadata($segment->getEntity())  // @todo ensure Entity exist !
                 ->getGlobalOwnerFieldName();
 
             if ($organizationField)

@@ -178,7 +178,7 @@ class CommunicationController extends BreadController
      *      requirements={ "recipient"="\d+"},
      * )
      * @Template("DsCommunicationBundle:Communication/widget:preview.html.twig")
-     * @AclAncestor("orocrm_communication_view")
+     * @AclAncestor("oro_communication_view")
      */
     public function previewAction(Request $request, $id)
     {

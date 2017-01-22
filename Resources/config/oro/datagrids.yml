@@ -525,9 +525,9 @@ datagrids:
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
         columns:
             contactedTimes:
-                label: orocrm.marketinglist.datagrid.contactedTimes
+                label: oro.marketinglist.datagrid.contactedTimes
             lastContactedAt:
-                label: orocrm.marketinglist.datagrid.lastContactedAt
+                label: oro.marketinglist.datagrid.lastContactedAt
                 frontend_type: datetime
         filters:
             columns:
@@ -539,7 +539,7 @@ datagrids:
                 lastContactedAt: { data_name: mli.lastContactedAt }
         properties:
             marketingList: ~
-        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
+        action_configuration: ['@oro_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
         options:
             skip_count_walker: true
             mixin: true
@@ -561,7 +561,7 @@ datagrids:
                             condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
         columns:
             subscribed:
-                label: orocrm.marketinglist.datagrid.subscribed
+                label: oro.marketinglist.datagrid.subscribed
                 frontend_type: boolean
         filters:
             columns:
@@ -572,25 +572,25 @@ datagrids:
         properties:
             subscribe_link:
                 type: url
-                route: orocrm_api_subscribe_marketinglist_unsubscribeditem
+                route: oro_api_subscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_api_unsubscribe_marketinglist_unsubscribeditem
+                route: oro_api_unsubscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
         actions:
             subscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.subscribe
+                label:        oro.marketinglist.action.subscribe
                 link:         subscribe_link
                 icon:         plus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
+                acl_resource: oro_marketinglist_unsubscribed_item_delete
             unsubscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.unsubscribe
+                label:        oro.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_create
+                acl_resource: oro_marketinglist_unsubscribed_item_create
 
     ds-communication-users-items-mixin:
         extends: ds-communication-users-items-base-unsubscribe-mixin
@@ -602,18 +602,18 @@ datagrids:
         properties:
             remove_link:
                 type: url
-                route: orocrm_api_remove_marketinglist_removeditem
+                route: oro_api_remove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             remove:
                 type:         ajaxdelete
-                label:        orocrm.marketinglist.action.remove
+                label:        oro.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
-                acl_resource: orocrm_marketing_list_removed_item_create
+                acl_resource: oro_marketing_list_removed_item_create
                 defaultMessages:
-                    confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
-                    confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
-                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
-                    confirm_content: orocrm.marketinglist.remove_dialog.content
-                    success:         orocrm.marketinglist.remove_dialog.success
+                    confirm_title:   oro.marketinglist.remove_dialog.confirm_title
+                    confirm_ok:      oro.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  oro.marketinglist.remove_dialog.confirm_cancel
+                    confirm_content: oro.marketinglist.remove_dialog.content
+                    success:         oro.marketinglist.remove_dialog.success
