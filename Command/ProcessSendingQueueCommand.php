@@ -102,12 +102,13 @@ class ProcessSendingQueueCommand extends ContainerAwareCommand implements CronCo
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $logger = new OutputLogger($output);
-        if ($this->getContainer()->get('oro_cron.job_manager')->getRunningJobsCount(self::COMMAND_NAME) > 1)
-        {
-            $logger->warning('Parsing job already running. Terminating current job.');
-
-            return self::STATUS_SUCCESS;
-        }
+// @todo migration to 2.x, prevent concurent job execution
+//        if ($this->getContainer()->get('oro_cron.job_manager')->getRunningJobsCount(self::COMMAND_NAME) > 1)
+//        {
+//            $logger->warning('Parsing job already running. Terminating current job.');
+//
+//            return self::STATUS_SUCCESS;
+//        }
 
         $this->output         = $output;
         $this->commManager    = $this->getContainer()->get('ds.communication.manager.communication');
