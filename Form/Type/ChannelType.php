@@ -45,7 +45,7 @@ class ChannelType extends AbstractType
             'required' => false
         ]);
 
-        $builder->add('icon', 'text', [
+        $builder->add('icon', 'oro_icon_select', [
             'label' => 'ds.communication.channel.icon.label'
         ]);
 

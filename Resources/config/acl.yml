@@ -58,26 +58,6 @@ ds.communication.content.delete:
     class: DsCommunicationBundle:Content
     permission: DELETE
 
-ds.communication.criterion.view:
-    type: entity
-    class: DsCommunicationBundle:Criterion
-    permission: VIEW
-
-ds.communication.criterion.create:
-    type: entity
-    class: DsCommunicationBundle:Criterion
-    permission: CREATE
-
-ds.communication.criterion.edit:
-    type: entity
-    class: DsCommunicationBundle:Criterion
-    permission: EDIT
-
-ds.communication.criterion.delete:
-    type: entity
-    class: DsCommunicationBundle:Criterion
-    permission: DELETE
-
 ds.communication.message.view:
     type: entity
     class: DsCommunicationBundle:Message

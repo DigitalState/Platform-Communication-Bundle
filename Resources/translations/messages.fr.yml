@@ -175,61 +175,7 @@ ds:
                 entity: Contenu
                 form: Contenu
                 owner: Propriétaire
-        criterion:
-            entity_label: Critère
-            entity_plural_label: Critères
-            entity_description: Le critère.
-            id:
-                label: Id
-                description: ~
-            created_at:
-                label: Créé le
-                description: ~
-            updated_at:
-                label: Mis à jour le
-                description: ~
-            communication:
-                label: Communication
-                description: ~
-                placeholder: Select Communication
-                title:
-                    label: Communication
-            implementation:
-                label: Implémentation
-                description: ~
-            operand_1:
-                label: Opérande 1
-                description: ~
-            operator:
-                label: Operateur
-                description: ~
-            operand_2:
-                label: Opérande 2
-                description: ~
-            owner:
-                label: Unité d'affaires
-                description: ~
-            collection:
-                column: Colonne
-            menu:
-                index:
-                    label: Critères
-            page:
-                index:
-                    title: Critères
-                view: ~
-                edit: ~
-            grid:
-                actions:
-                    view: Visionner
-                    update: Editer
-                    delete: Supprimer
-            button:
-                create: Créer un critère
-            widget:
-                entity: Critère
-                form: Critère
-                owner: Propriétaire
+
         message:
             entity_label: Message
             entity_plural_label: Messages

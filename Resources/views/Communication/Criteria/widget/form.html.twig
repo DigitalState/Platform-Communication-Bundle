@@ -1,10 +1,85 @@
+{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}
+{% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+
+
+{% if form.entityName.vars.value is empty %}
+{# @todo ensure the Entity selector update the Query filter in the correct state #}
+<div class="container-fluid accordion" data-bound-component="oroactivitylist/js/app/components/activity-list-component">
+    <div class="items list-box list-shaped"></div>
+    <div class="no-data">
+        <span>Save the Communication and reload this page to select the criterias</span>
+    </div>
+</div>
+
+{% else %}
+    {% set widgetType = 'ds_communication_communication' %}
+    {% set name = 'form' %}
+    {% set nameOfHiddenCriteriaDefinition = widgetType ~ '_criteria' %}
+    {% set nameOfEntitySelect = widgetType ~ '_entityName' %}
+
+    {% set segmentFilter %}
+        {{ form_row(form.entityName) }}
+        {{ form_row(form.criteria) }}
+        {% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}
+        {{ QD.query_designer_column_chain_template('column-chain-template') }}
+        {% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
+        {{ segmentQD.query_designer_condition_builder({
+            'id': name ~ '-condition-builder',
+            'criteria_list_id': 'filter-criteria-list',
+            'entity_choice_id': nameOfEntitySelect,
+            'disable_audit': false
+        }) }}
+
+        {% set fieldsData = {} %}
+        {% if not form.entityName.vars.value is empty %}
+            {% set encodedEntityName = form.entityName.vars.value|replace({'\\': '_'}) %}
+            {% set routeParams       = {}|merge({'entityName': encodedEntityName}) %}
+
+            {% set fieldsData = render(path('oro_api_querydesigner_fields_entity', routeParams)) %}
+        {% endif %}
+
+        {% set widgetOptions = {
+        valueSource: '[data-ftid=' ~ nameOfHiddenCriteriaDefinition ~ ']',
+        fieldsLoader: {
+        entityChoice:      '[data-ftid=' ~ nameOfEntitySelect ~ ']',
+        loadingMaskParent: '#' ~ form.vars.id,
+        router:            'oro_api_querydesigner_fields_entity',
+        routingParams:     {},
+        fieldsData:        fieldsData,
+        confirmMessage:    name|replace('_', '.') ~ '.change_entity_confirmation',
+        },
+        filters: {
+        criteriaList:     '#filter-criteria-list',
+        conditionBuilder: '#' ~ name ~ '-condition-builder'
+        },
+        entities:                   oro_query_filter_entities(),
+        metadata:                   oro_query_filter_metadata(),
+        disable_audit:              false,
+        initEntityChangeEvents:     false,
+        select2FieldChoiceTemplate: '#column-chain-template',
+        } %}
+        {% set widgetOptions = update_segment_widget_options(widgetOptions, name) %}
+        <div
+                data-page-component-module="orosegment/js/app/components/segment-component"
+                data-page-component-options="{{ widgetOptions|json_encode }}">
+        </div>
+    {% endset %}
+
+
+
+
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ form_widget(form.criteria) }}
+            {{ segmentFilter|raw }}
         </div>
     </div>
     {% for widget in ds_widgets({ position: 'ds_communication_communication_form_criteria', context: context }, { form: form }) %}
         {{ widget.content|raw }}
     {% endfor %}
+
+
+    {% endif %}
 </div>

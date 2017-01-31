@@ -57,15 +57,38 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Communication
 {
+    const GRID_PREFIX = 'oro_communication_results_grid_';
+
+
     use Attribute\Id;
     use Attribute\CreatedAt;
     use Attribute\UpdatedAt;
     use Attribute\Title;
     use Attribute\Description;
+    use Attribute\EntityName;
 
     use Ownership\BusinessUnitAwareTrait;
 
     use FallbackTrait;
+
+    protected $users = []; #region @todo use service in template for datagrid
+    /**
+     * @return array
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param array $users
+     */
+    public function setUsers($users)
+    {
+        $this->users = $users;
+        return $this;
+    }
+    #endregion
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -110,43 +133,24 @@ class Communication
     # endregion
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Ds\Bundle\CommunicationBundle\Entity\Criterion", mappedBy="communication", cascade={"persist", "remove"})
+     * @ORM\Column(type="json_array")
      */
     protected $criteria; # region accessors
 
     /**
-     * Add criterion
-     *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Criterion $criterion
-     * @return \Ds\Bundle\CommunicationBundle\Entity\Communication
-     */
-    public function addCriterion(Criterion $criterion)
-    {
-        $criterion->setCommunication($this);
-        $this->criteria[] = $criterion;
-
-        return $this;
-    }
-
-    /**
-     * Remove criterion
-     *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Criterion $criterion
-     */
-    public function removeCriterion(Criterion $criterion)
-    {
-        $this->criteria->removeElement($criterion);
-    }
-
-    /**
-     * Get criteria
-     *
-     * @return array
+     * @return mixed
      */
     public function getCriteria()
     {
-        return $this->criteria->toArray();
+        return $this->criteria;
+    }
+
+    /**
+     * @param mixed $criteria
+     */
+    public function setCriteria($criteria)
+    {
+        $this->criteria = $criteria;
     }
 
     # endregion
@@ -157,6 +161,6 @@ class Communication
     public function __construct()
     {
         $this->contents = new ArrayCollection;
-        $this->criteria = new ArrayCollection;
     }
+
 }

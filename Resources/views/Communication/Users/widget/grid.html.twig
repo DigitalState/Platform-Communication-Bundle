@@ -1,1 +1,30 @@
-222
+
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% set gridName = context.gridName  %}
+
+    {% if gridName is defined and gridName %}
+        {% set renderParams = renderParams|default({})|merge({enableViews: false}) %}
+        {% set gridParams =  {
+        '_grid_view': {'_disabled': true},
+        '_tags'     : {'_disabled': true}
+        } %}
+
+        {% if oro_config_value('oro_report.display_sql_query') %}
+            {% set gridParams = gridParams|merge({'display_sql_query': true}) %}
+        {% endif %}
+
+        {% set params = params|default({})|merge(gridParams) %}
+        {{ dataGrid.renderGrid(gridName, params, renderParams) }}
+    {% else %}
+        <div class="container-fluid">
+            <div class="grid-container">
+                <div class="no-data">
+                    <span>{{ 'Invalid segment configuration'|trans }}</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+

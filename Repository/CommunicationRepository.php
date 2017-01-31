@@ -2,6 +2,7 @@
 
 namespace Ds\Bundle\CommunicationBundle\Repository;
 
+use Ds\Bundle\CommunicationBundle\Entity\Communication;
 use Ds\Bundle\EntityBundle\Repository\EntityRepository;
 
 /**
@@ -9,4 +10,7 @@ use Ds\Bundle\EntityBundle\Repository\EntityRepository;
  */
 class CommunicationRepository extends EntityRepository
 {
+
+
+
 }

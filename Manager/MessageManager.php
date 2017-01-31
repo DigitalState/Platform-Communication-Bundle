@@ -2,6 +2,8 @@
 
 namespace Ds\Bundle\CommunicationBundle\Manager;
 
+use Ds\Bundle\CommunicationBundle\Channel\Channel;
+use Ds\Bundle\TransportBundle\Transport\Transport;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ds\Bundle\CommunicationBundle\Collection\ChannelCollection;
@@ -15,6 +17,7 @@ use DateTime;
  */
 class MessageManager extends ApiEntityManager
 {
+
     /**
      * @var \Ds\Bundle\CommunicationBundle\Collection\ChannelCollection
      */
@@ -28,44 +31,52 @@ class MessageManager extends ApiEntityManager
     /**
      * Constructor
      *
-     * @param string $class
-     * @param \Doctrine\Common\Persistence\ObjectManager $om
+     * @param string                                                      $class
+     * @param \Doctrine\Common\Persistence\ObjectManager                  $om
      * @param \Ds\Bundle\CommunicationBundle\Collection\ChannelCollection $channelCollection
      */
     public function __construct($class, ObjectManager $om, ChannelCollection $channelCollection, TransportCollection $transportCollection)
     {
         parent::__construct($class, $om);
 
-        $this->channelCollection = $channelCollection;
+        $this->channelCollection   = $channelCollection;
         $this->transportCollection = $transportCollection;
     }
 
     /**
      * Send message
      *
-     * @param \Ds\Bundle\CommunicationBundle\Entity\Message $message
-     * @param \Ds\Bundle\TransportBundle\Entity\Profile $profile
-     * @return \Ds\Bundle\CommunicationBundle\Manager\MessageManager
+     * @param Message $message
+     * @param \Ds\Bundle\TransportBundle\Entity\Profile     $profile
+     *
+     * @return Message
      */
-    public function send(Message $message, Profile $profile)
+    public function send(Message $message)
     {
-        $message->setSentAt(new DateTime);
-        $this->om->persist($message);
-        $this->om->flush();
+        $profile = $message->getProfile();
+        $recipient = $this->om->getRepository($message->getRecipientEntityName())->find($message->getRecipientEntityId());
 
+        /** @var Channel $channel */
         $channel = $this->channelCollection->filter(function($item) use ($message) {
             return $item['implementation'] == $message->getChannel()->getImplementation();
         })->first()['channel'];
 
+        /** @var Transport $transport */
         $transport = $this->transportCollection->filter(function($item) use ($profile) {
             return $item['implementation'] == $profile->getTransport()->getImplementation();
         })->first()['transport'];
 
         $transport->setProfile($profile);
-        $channel
-            ->setTransport($transport)
-            ->send($message);
 
-        return $this;
+        $channel->setTransport($transport);
+
+
+        if(!$channel->canSendTo($recipient))
+        {
+            $message->setDeliveryStatus(\Ds\Bundle\TransportBundle\Model\Message::STATUS_CANCELLED);
+            return $message;
+        }
+
+        return $channel->send($message, $recipient);
     }
 }

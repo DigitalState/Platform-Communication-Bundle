@@ -1,0 +1,28 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+
+<div class="widget-content form-horizontal box-content box-split-content row-fluid">
+    <div class="responsive-block">
+        <div class="box-type1">
+            <div class="title">
+                <span class="widget-title">{{ communication.title }}</span>
+            </div>
+
+            {% for message in messages %}
+                <div class="row-fluid">
+                    {#{{ UI.renderProperty('From:'|trans, "test@example.com") }}#}
+                    {{ UI.renderProperty('To:'|trans, message.recipientFullName ~ " <" ~ recipient.email ~">") }}
+
+                    {{ UI.renderProperty('Date:'|trans, communication.updatedAt | date) }}  {# @todo replace with communication "Send At" date #}
+
+                    {{ UI.renderProperty('Subject:'|trans, message.title) }}
+                    {{ UI.renderHtmlProperty('Body:'|trans, " ") }}
+                    <br>
+                    {{ message.presentation |oro_html_sanitize }}
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+</div>

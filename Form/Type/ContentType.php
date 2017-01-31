@@ -43,12 +43,18 @@ class ContentType extends AbstractType
             'label' => 'ds.communication.content.title.label'
         ]);
 
+        /*
         $builder->add('template', 'entity', [
             'label' => 'ds.communication.content.template.label',
             'class' => 'DsCommunicationBundle:Template',
-            'choice_label' => 'title',
-            'placeholder' => 'ds.communication.content.template.placeholder'
+            'choice_label' => function ($value, $key, $index)
+            {
+                // @todo Templates list should be updated dynamicly based on the entityName selected on the Communication
+                return preg_replace('/.*\x5c([^\x5c\s]*) (.*)/', '$1 -> $2', $value); //  \x5c = '\'
+            },
+            'placeholder' => 'ds.communication.content.template.placeholder',
         ]);
+        */
 
         $builder->add('presentation', 'oro_rich_text', [
             'label' => 'ds.communication.content.presentation.label'
