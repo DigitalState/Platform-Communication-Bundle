@@ -1,4 +1,4 @@
-datagrid:
+datagrids:
     ds-communication-channel:
         extended_entity_name: Ds\Bundle\CommunicationBundle\Entity\Channel
         source:
@@ -64,7 +64,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.channel.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.channel.view
                 rowAction: true
             update:
@@ -150,7 +150,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.communication.view
                 rowAction: true
             update:
@@ -310,7 +310,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.content.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.content.view
                 rowAction: true
             update:
@@ -407,7 +407,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.criterion.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.criterion.view
                 rowAction: true
             update:
@@ -493,7 +493,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.message.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.message.view
                 rowAction: true
             update:
@@ -579,7 +579,7 @@ datagrid:
                 type: navigate
                 label: ds.communication.template.grid.actions.view
                 link: view_link
-                icon: eye-open
+                icon: eye
                 acl_resource: ds.communication.template.view
                 rowAction: true
             update:
