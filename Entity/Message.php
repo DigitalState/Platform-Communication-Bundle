@@ -63,6 +63,7 @@ class Message
     use Attribute\Title;
     use Attribute\Presentation;
     use Attribute\SentAt;
+    use Attribute\Data;
 
     use Ownership\BusinessUnitAwareTrait;
 
@@ -163,4 +164,37 @@ class Message
     }
 
     # endregion
+
+    /**
+     * @var string
+     * @ORM\Column(name="template", type="text", nullable=true)
+     * @Assert\Length(max=65532, maxMessage="ds.entity.presentation.length.max")
+     */
+    protected $template; # region accessors
+
+    /**
+     * Set template
+     *
+     * @param string $template
+     * @return object
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * Get template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    # endregion
+
 }

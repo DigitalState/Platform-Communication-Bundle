@@ -70,18 +70,26 @@ abstract class AbstractChannel implements Channel
 
         // @todo This solution is temporary, use resolvers instead ^.
         $persona = $this->personaManager->getList(null, null, [
-            'user' => $message->getUser(),
-            'type' => 'default'
+            'user' => $message->getUser()
         ]);
+
         $persona = array_shift($persona);
-        $to = $persona->getData($message->getChannel()->getDefaultTo());
+        if (null !== $persona) {
+            $to = $persona->getData($message->getChannel()->getDefaultTo());
+        } else {
+            $to = $message->getData("to");
+        }
 
         $messageModel = new MessageModel;
         $messageModel
             ->setTo($to)
+            ->setUser($message->getUser())
+            ->setData($message->getData())
             ->setTitle($message->getTitle())
+            ->setTemplate($message->getTemplate())
             ->setContent($message->getPresentation());
-        $this->transport->send($messageModel);
+
+        $this->transport->send($messageModel, $this->transport->getProfile());
 
         return $this;
     }
